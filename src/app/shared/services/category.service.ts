@@ -25,12 +25,13 @@ export class CategoryService {
     if (this.categoriesSubject.value.length > 0)
       return of(this.categoriesSubject.value);
 
-    return this.http.get<Category[]>(this.apiURL).pipe(
+    const result = this.http.get<Category[]>(this.apiURL).pipe(
       tap(categories => this.categoriesSubject.next(categories)),
       catchError(error => throwError(() => new Error('Error fetching categories')))
     );
-  }
 
+    return result;
+  }
   // Get a single category by id
   getCategory(id: number): Observable<Category | undefined> {
     const existingCategory = this.categoriesSubject.value.find(cat => Number(cat.id) === Number(id));

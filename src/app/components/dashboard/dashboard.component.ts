@@ -4,13 +4,15 @@ import { Category } from "../../interfaces/category";
 import { ProductService } from "../../shared/services/product.service";
 import { CategoryService } from "../../shared/services/category.service";
 import { sharedImports } from "../../shared/helpers/shared-imports";
-import { map, Observable } from "rxjs";
+import { combineLatest, map, Observable } from "rxjs";
+import { PieChartComponent } from "../pie-chart/pie-chart.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     ...sharedImports,
+    PieChartComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -18,6 +20,8 @@ import { map, Observable } from "rxjs";
 export class DashboardComponent implements OnInit {
   products$!: Observable<Product[]>;  // Observable for product state
   categories$!: Observable<Category[]>;  // Observable for categories state
+  chartData: number[] = [];  // Data for the pie chart
+  chartLabels: string[] = [];  // Labels for the pie chart
 
   constructor(
     private productService: ProductService,
@@ -30,15 +34,23 @@ export class DashboardComponent implements OnInit {
 
     this.productService.fetchProducts().subscribe();
     this.categoryService.fetchCategories().subscribe();
+
+    this.populateChartData();
   }
 
-  // Get product count for each category
-  getProductCountForCategory(categoryId: number): Observable<number> {
-    const result = this.products$.pipe(
-      map((products) => products.filter(p => p.categoryId === categoryId).length)
-    );
-
-    return result;
+  populateChartData(): void {
+    combineLatest([this.categories$, this.products$])
+      .pipe(
+        map(([categories, products]) => {
+          return categories.map(category => ({
+            name: category.name,
+            count: products.filter(product => product.categoryId === category.id).length
+          }));
+        })
+      )
+      .subscribe(data => {
+        this.chartLabels = data.map(item => item.name);
+        this.chartData = data.map(item => item.count);
+      });
   }
-
 }
