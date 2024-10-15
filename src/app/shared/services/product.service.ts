@@ -28,6 +28,10 @@ export class ProductService {
     );
   }
 
+  updateProducts(products: Product[]): void {
+    this.productsSubject.next(products);
+  }
+
   // Get a single product from the state or fetch it from the API
   getProduct(id: number): Observable<Product | undefined> {
     const existingProduct = this.productsSubject.value.find(product => Number(product.id) === Number(id));

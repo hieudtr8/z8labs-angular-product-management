@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from "../../../shared/services/product.service";
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Product } from "../../../interfaces/product";
 import { sharedImports } from "../../../shared/helpers/shared-imports";
 import { TableComponent } from "../../table/table.component";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
+import { CategoryService } from "../../../shared/services/category.service";
 
 @Component({
   selector: 'app-product-list',
@@ -24,17 +25,39 @@ export class ProductListComponent implements OnInit {
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
     { key: 'price', label: 'Price' },
-    { key: 'categoryId', label: 'Category ID' },
+    { key: 'categoryName', label: 'Category Name' },
   ];
 
   constructor(
     private productService: ProductService,
+    private categoryService: CategoryService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.products$ = this.productService.products$;
-    this.productService.fetchProducts().subscribe();
+     // Fetch both products and categories using forkJoin
+     forkJoin({
+      products: this.productService.fetchProducts(),
+      categories: this.categoryService.fetchCategories()
+    }).subscribe(({ products, categories }) => {
+      // Map category names to products
+      const categoryMap = categories.reduce((acc, category) => {
+        if (!category.id) return acc;
+
+        acc[category.id] = category.name;
+        return acc;
+      }, {} as { [key: number]: string });
+
+      // Assign category names to products
+      const updatedProducts = products.map(product => ({
+        ...product,
+        categoryName: categoryMap[product.categoryId] || 'Unknown'
+      }));
+
+      this.productService.updateProducts(updatedProducts); // Update the product subject
+
+      this.products$ = this.productService.products$;
+    });
   }
 
   deleteProduct(id: number): void {
