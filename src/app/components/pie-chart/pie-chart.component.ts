@@ -1,4 +1,3 @@
-import { CommonModule } from "@angular/common";
 import { Component, Input } from '@angular/core';
 import { ChartType } from 'chart.js';
 import { BaseChartDirective } from "ng2-charts";
