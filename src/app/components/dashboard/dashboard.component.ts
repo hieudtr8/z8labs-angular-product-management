@@ -4,6 +4,7 @@ import { Category } from "../../interfaces/category";
 import { ProductService } from "../../shared/services/product.service";
 import { CategoryService } from "../../shared/services/category.service";
 import { sharedImports } from "../../shared/helpers/shared-imports";
+import { map, Observable } from "rxjs";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,8 +16,8 @@ import { sharedImports } from "../../shared/helpers/shared-imports";
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  products: Product[] = [];
-  categories: Category[] = [];
+  products$!: Observable<Product[]>;  // Observable for product state
+  categories$!: Observable<Category[]>;  // Observable for categories state
 
   constructor(
     private productService: ProductService,
@@ -24,22 +25,21 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getProducts();
-    this.getCategories();
+    this.products$ = this.productService.products$;
+    this.categories$ = this.categoryService.categories$;
+
+    this.productService.fetchProducts().subscribe();
+
+    this.categoryService.fetchCategories().subscribe();
   }
 
-  getProducts(): void {
-    this.productService.getProducts()
-      .subscribe((products) => this.products = products);
-  }
+  // Get product count for each category
+  getProductCountForCategory(categoryId: number): Observable<number> {
+    const result = this.products$.pipe(
+      map((products) => products.filter(p => p.categoryId === categoryId).length)
+    );
 
-  getCategories(): void {
-    this.categoryService.getCategories()
-      .subscribe((categories) => this.categories = categories);
-  }
-
-  getProductCountForCategory(categoryId: number): number {
-    return this.products.filter((product) => product.categoryId === categoryId).length;
+    return result;
   }
 
 }

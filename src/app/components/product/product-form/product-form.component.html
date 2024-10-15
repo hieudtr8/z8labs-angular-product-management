@@ -28,7 +28,7 @@
     <select id="categoryId" formControlName="categoryId">
       <option value="" disabled>Select a category</option>
       <!-- Loop over categories if you have a category list available -->
-      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</option>
     </select>
     <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
       Category is required.

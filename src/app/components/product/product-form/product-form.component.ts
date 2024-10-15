@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { sharedImports } from "../../../shared/helpers/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
+import { Observable } from "rxjs/internal/Observable";
 
 @Component({
   selector: 'app-product-form',
@@ -15,13 +16,13 @@ import { CategoryService } from "../../../shared/services/category.service";
     ReactiveFormsModule
   ],
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss'
+  styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit {
   productForm!: FormGroup;
   isEditMode: boolean = false;
   productId?: number;
-  categories: Category[] = [];
+  categories$!: Observable<Category[]>;
 
   constructor(
     private fb: FormBuilder,
@@ -33,17 +34,16 @@ export class ProductFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Load categories
-    this.categoryService.getCategories()
-      .subscribe(categories => this.categories = categories);
+    // Lắng nghe state từ CategoryService
+    this.categories$ = this.categoryService.categories$;
+
+    // Tải danh sách category nếu chưa có
+    this.categoryService.fetchCategories().subscribe();
 
     // Initialize the form
     this.productForm = this.fb.group({
       name: ['', Validators.required],
-      price: ['', [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ],
+      price: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       categoryId: [null, Validators.required]
     });

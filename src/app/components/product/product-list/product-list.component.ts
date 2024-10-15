@@ -1,24 +1,34 @@
-import { Component } from '@angular/core';
-import { Product } from "../../../interfaces/product";
+import { Component, OnInit } from '@angular/core';
 import { ProductService } from "../../../shared/services/product.service";
+import { Observable } from 'rxjs';
+import { Product } from "../../../interfaces/product";
 import { sharedImports } from "../../../shared/helpers/shared-imports";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
     ...sharedImports,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.scss'
+  styleUrls: ['./product-list.component.scss']
 })
-export class ProductListComponent {
-  products: Product[] = [];
+export class ProductListComponent implements OnInit {
+  products$!: Observable<Product[]>; // Observable for products state
 
-  constructor(private productService: ProductService  ) { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.productService.getProducts()
-      .subscribe((products) => this.products = products);
+    this.products$ = this.productService.products$;
+
+    this.productService.fetchProducts().subscribe();
+  }
+
+  // Delete a product
+  deleteProduct(id: number): void {
+    this.productService.deleteProduct(id).subscribe();
   }
 }

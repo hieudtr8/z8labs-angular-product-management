@@ -1,5 +1,7 @@
 <p>Category List</p>
 
-<div *ngFor="let item of categories">
+<a routerLink="/categories/new">Add New Category</a>
+
+<div *ngFor="let item of categories$ | async">
   {{ item.name }}
 </div>

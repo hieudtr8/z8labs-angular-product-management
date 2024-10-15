@@ -13,7 +13,7 @@ import { Category } from "../../../interfaces/category";
     ReactiveFormsModule
   ],
   templateUrl: './category-form.component.html',
-  styleUrl: './category-form.component.scss'
+  styleUrls: ['./category-form.component.scss']
 })
 export class CategoryFormComponent {
   categoryForm!: FormGroup;
@@ -57,7 +57,6 @@ export class CategoryFormComponent {
       });
   }
 
-  // Save category
   // Handle form submission for both adding and updating
   onSubmit(): void {
     if (this.categoryForm.invalid) {
@@ -78,5 +77,3 @@ export class CategoryFormComponent {
     }
   }
 }
-
-

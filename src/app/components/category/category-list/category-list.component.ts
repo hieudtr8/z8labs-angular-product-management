@@ -2,24 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { sharedImports } from "../../../shared/helpers/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
+import { Observable } from "rxjs";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
   imports: [
     ...sharedImports,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './category-list.component.html',
-  styleUrl: './category-list.component.scss'
+  styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit {
-  categories: Category[] = [];
+  categories$!: Observable<Category[]>;  // Observable for categories state
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    this.categoryService.getCategories()
-      .subscribe(categories => this.categories = categories);
-  }
+    this.categories$ = this.categoryService.categories$;
 
+    this.categoryService.fetchCategories().subscribe();
+  }
 }

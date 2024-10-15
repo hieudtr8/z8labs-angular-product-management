@@ -1,5 +1,5 @@
 <h2>Dashboard</h2>
-<div *ngFor="let category of categories">
+<div *ngFor="let category of categories$ | async">
   <h3>{{ category.name }}</h3>
-  <p *ngIf="category.id" >Products: {{ getProductCountForCategory(category.id) }}</p>
+  <p *ngIf="category.id" >Products: {{ getProductCountForCategory(category.id) | async }}</p>
 </div>

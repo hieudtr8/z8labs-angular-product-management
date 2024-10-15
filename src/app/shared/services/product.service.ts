@@ -1,33 +1,72 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../../interfaces/product';
-import { Observable, of } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private apiURL = "https://670e32a8073307b4ee45da4b.mockapi.io/angular-hieudtr8-product-management/products"
+  private apiURL = "https://670e32a8073307b4ee45da4b.mockapi.io/angular-hieudtr8-product-management/products";
+
+  // BehaviorSubject to store product list state
+  private productsSubject = new BehaviorSubject<Product[]>([]);
+  public products$ = this.productsSubject.asObservable();
 
   constructor(private http: HttpClient ) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiURL);
+  // Fetch products from API and update state
+  fetchProducts(): Observable<Product[]> {
+    if (this.productsSubject.value.length > 0) {
+      return of(this.productsSubject.value);
+    }
+
+    return this.http.get<Product[]>(this.apiURL).pipe(
+      tap((products) => this.productsSubject.next(products)),
+      catchError(error => throwError(() => new Error('Error fetching products')))
+    );
   }
 
+  // Get a single product by id
   getProduct(id: number): Observable<Product | undefined> {
-    return this.http.get<Product>(`${this.apiURL}/${id}`);
+    return this.http.get<Product>(`${this.apiURL}/${id}`).pipe(
+      catchError(error => throwError(() => new Error('Error fetching product')))
+    );
   }
 
+  // Add a new product and update the product state
   addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.apiURL, product);
+    return this.http.post<Product>(this.apiURL, product).pipe(
+      tap((newProduct) => {
+        const updatedProducts = [...this.productsSubject.value, newProduct];
+        this.productsSubject.next(updatedProducts); // Update state
+      }),
+      catchError(error => throwError(() => new Error('Error adding product')))
+    );
   }
 
+  // Update an existing product and update the product state
   updateProduct(product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiURL}/${product.id}`, product);
+    return this.http.put<Product>(`${this.apiURL}/${product.id}`, product).pipe(
+      tap((updatedProduct) => {
+        const updatedProducts = this.productsSubject.value.map(p =>
+          p.id === updatedProduct.id ? updatedProduct : p
+        );
+        this.productsSubject.next(updatedProducts); // Update state
+      }),
+      catchError(error => throwError(() => new Error('Error updating product')))
+    );
   }
 
+  // Delete a product and update the product state
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+    return this.http.delete<void>(`${this.apiURL}/${id}`).pipe(
+      tap(() => {
+        const updatedProducts = this.productsSubject.value.filter(product => product.id !== id);
+        this.productsSubject.next(updatedProducts); // Update state
+      }),
+      catchError(error => throwError(() => new Error('Error deleting product')))
+    );
   }
 }
