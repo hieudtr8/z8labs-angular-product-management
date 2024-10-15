@@ -3,6 +3,7 @@ import { Category } from "../../interfaces/category";
 import { Observable, BehaviorSubject, throwError, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { catchError, tap } from 'rxjs/operators';
+import { ProductService } from "./product.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,10 @@ export class CategoryService {
   private categoriesSubject = new BehaviorSubject<Category[]>([]);
   public categories$ = this.categoriesSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private productService: ProductService
+  ) {}
 
   // Fetch all categories and update state
   fetchCategories(): Observable<Category[]> {
@@ -29,7 +33,14 @@ export class CategoryService {
 
   // Get a single category by id
   getCategory(id: number): Observable<Category | undefined> {
-    return this.http.get<Category>(`${this.apiURL}/${id}`);
+    const existingCategory = this.categoriesSubject.value.find(cat => Number(cat.id) === Number(id));
+
+    if (existingCategory)
+      return of(existingCategory);
+
+    return this.http.get<Category>(`${this.apiURL}/${id}`).pipe(
+      catchError(error => throwError(() => new Error('Error fetching category')))
+    );
   }
 
   // Add a new category and update state
@@ -62,6 +73,9 @@ export class CategoryService {
       tap(() => {
         const currentCategories = this.categoriesSubject.value.filter(cat => cat.id !== id);
         this.categoriesSubject.next(currentCategories);
+
+        // Delete all products in the category
+        this.productService.deleteProductsByCategory(id).subscribe();
       }),
       catchError(error => throwError(() => new Error('Error deleting category')))
     );

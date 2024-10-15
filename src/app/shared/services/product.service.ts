@@ -28,8 +28,15 @@ export class ProductService {
     );
   }
 
-  // Get a single product by id
+  // Get a single product from the state or fetch it from the API
   getProduct(id: number): Observable<Product | undefined> {
+    const existingProduct = this.productsSubject.value.find(product => Number(product.id) === Number(id));
+    if (existingProduct) {
+      // If the product is found in the state, return it
+      return of(existingProduct);
+    }
+
+    // Otherwise, fetch it from the API and update the state
     return this.http.get<Product>(`${this.apiURL}/${id}`).pipe(
       catchError(error => throwError(() => new Error('Error fetching product')))
     );
@@ -68,5 +75,15 @@ export class ProductService {
       }),
       catchError(error => throwError(() => new Error('Error deleting product')))
     );
+  }
+
+  deleteProductsByCategory(categoryId: number): Observable<void> {
+    const listProductsToDelete = this.productsSubject.value.filter(product => product.categoryId === categoryId);
+    if (listProductsToDelete.length === 0) {
+      return of(undefined);
+    }
+
+    listProductsToDelete.forEach(product => product.id && this.deleteProduct(product.id).subscribe());
+    return of(undefined); // Ensure an Observable<void> is always returned
   }
 }

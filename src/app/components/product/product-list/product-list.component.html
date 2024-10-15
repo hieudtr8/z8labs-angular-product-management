@@ -5,4 +5,8 @@
 
 <div *ngFor="let item of products$ | async">
   {{ item.name }} - {{ item.price }}
+  <!-- edit -->
+  <a routerLink="/products/edit/{{ item.id }}">Edit</a>
+  <!-- delete -->
+  <button (click)="item.id && deleteProduct(item.id)">Delete</button>
 </div>
