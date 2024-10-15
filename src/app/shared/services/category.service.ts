@@ -1,37 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Category } from "../../interfaces/category";
 import { Observable, of } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private categories: Category[] = [];
+  private apiURL = "https://670e32a8073307b4ee45da4b.mockapi.io/angular-hieudtr8-product-management/categories"
+
+  constructor(private http: HttpClient) {}
 
   getCategories(): Observable<Category[]> {
-    return of(this.categories);
+    return this.http.get<Category[]>(this.apiURL);
   }
 
   getCategory(id: number): Observable<Category | undefined> {
-    return of(this.categories.find((category) => category.id === id));
+    return this.http.get<Category>(`${this.apiURL}/${id}`);
   }
 
   addCategory(category: Category): Observable<Category> {
-    category.id = this.categories.length + 1;
-    this.categories.push(category);
-    return of(category);
+    return this.http.post<Category>(this.apiURL, category);
   }
 
   updateCategory(category: Category): Observable<Category> {
-    const index = this.categories.findIndex((c) => c.id === category.id);
-    if (index !== -1) {
-      this.categories[index] = category;
-    }
-    return of(category);
+    return this.http.put<Category>(`${this.apiURL}/${category.id}`, category);
   }
 
   deleteCategory(id: number): Observable<void> {
-    this.categories = this.categories.filter((category) => category.id !== id);
-    return of(void 0);
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
   }
 }

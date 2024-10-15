@@ -3,11 +3,14 @@ import { Product } from "../../interfaces/product";
 import { Category } from "../../interfaces/category";
 import { ProductService } from "../../shared/services/product.service";
 import { CategoryService } from "../../shared/services/category.service";
+import { sharedImports } from "../../shared/helpers/shared-imports";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [
+    ...sharedImports,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -21,6 +24,8 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getProducts();
+    this.getCategories();
   }
 
   getProducts(): void {

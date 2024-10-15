@@ -1,1 +1,5 @@
-<p>product-list works!</p>
+<p>Product List</p>
+
+<div *ngFor="let item of products">
+  {{ item.name }} - {{ item.price }}
+</div>
