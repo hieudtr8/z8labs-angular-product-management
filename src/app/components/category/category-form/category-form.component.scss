@@ -24,8 +24,8 @@
 }
 
 .category-form {
-  max-width: 600px;
-  margin: 16px auto;
+  max-width: 100%;
+  margin: 20px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -42,7 +42,7 @@
 
     label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       font-weight: bold;
     }
 
@@ -67,6 +67,7 @@
 
   .submit-button {
     width: 100%;
+    margin-top: 10px;
     padding: 10px;
     border: none;
     border-radius: 4px;
