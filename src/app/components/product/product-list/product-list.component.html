@@ -1,12 +1,9 @@
 <p>Product List</p>
 
-<!-- nav add new -->
-<a routerLink="/products/new">Add New Product</a>
-
-<div *ngFor="let item of products$ | async">
-  {{ item.name }} - {{ item.price }}
-  <!-- edit -->
-  <a routerLink="/products/edit/{{ item.id }}">Edit</a>
-  <!-- delete -->
-  <button (click)="item.id && deleteProduct(item.id)">Delete</button>
-</div>
+<app-table
+  [data]="(products$ | async) ?? []"
+  [columns]="columns"
+  (add)="onAdd()"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)"
+></app-table>

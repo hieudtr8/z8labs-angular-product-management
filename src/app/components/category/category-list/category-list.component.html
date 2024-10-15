@@ -1,11 +1,9 @@
 <p>Category List</p>
 
-<a routerLink="/categories/new">Add New Category</a>
-
-<div *ngFor="let item of categories$ | async">
-  {{ item.name }}
-  <!-- edit -->
-  <a routerLink="/categories/edit/{{ item.id }}">Edit</a>
-  <!-- delete -->
-  <button (click)="item.id && deleteCategory(item.id)">Delete</button>
-</div>
+<app-table
+  [data]="(categories$ | async) ?? []"
+  [columns]="columns"
+  (add)="onAdd()"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)"
+></app-table>

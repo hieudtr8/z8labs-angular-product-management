@@ -1,0 +1,42 @@
+
+button {
+  margin-right: 5px;
+  padding: 4px 8px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  button.delete {
+    background-color: #dc3545;
+  }
+
+  button.delete:hover {
+    background-color: #c82333;
+  }
+}

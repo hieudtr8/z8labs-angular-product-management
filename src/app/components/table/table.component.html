@@ -1,0 +1,23 @@
+<!-- Widget button add new -->
+<button (click)="onAdd()">Add new</button>
+<!-- Table -->
+<table>
+  <!-- Headers -->
+  <thead>
+    <tr>
+      <th *ngFor="let col of columns">{{ col.label }}</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <!-- Body row data -->
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+      <!-- Row actions -->
+      <td>
+        <button (click)="onEdit(row)">Edit</button>
+        <button (click)="onDelete(row)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
