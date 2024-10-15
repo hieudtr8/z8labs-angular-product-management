@@ -1,0 +1,5 @@
+<h2>Dashboard</h2>
+<div *ngFor="let category of categories">
+  <h3>{{ category.name }}</h3>
+  <p>Products: {{ getProductCountForCategory(category.id) }}</p>
+</div>
