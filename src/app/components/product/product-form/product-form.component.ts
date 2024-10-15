@@ -33,12 +33,8 @@ export class ProductFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Load categories
-    // Lắng nghe state từ CategoryService
-    this.categories$ = this.categoryService.categories$;
-
-    // Tải danh sách category nếu chưa có
-    this.categoryService.fetchCategories().subscribe();
+    // Load categories from RxJS state management
+    this.loadListCategories();
 
     // Initialize the form
     this.productForm = this.fb.group({
@@ -56,6 +52,12 @@ export class ProductFormComponent implements OnInit {
         this.loadProduct(this.productId);
       }
     });
+  }
+
+  loadListCategories(): void {
+    this.categories$ = this.categoryService.categories$;
+
+    this.categoryService.fetchCategories().subscribe();
   }
 
   // Load product details for editing

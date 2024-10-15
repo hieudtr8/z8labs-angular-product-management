@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
     this.categories$ = this.categoryService.categories$;
 
     this.productService.fetchProducts().subscribe();
-
     this.categoryService.fetchCategories().subscribe();
   }
 
