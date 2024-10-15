@@ -1,1 +1,19 @@
-<p>category-form works!</p>
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Category Name</label>
+    <input id="name" formControlName="name" type="text" />
+    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+      Name is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Description</label>
+    <input id="description" formControlName="description" type="text" />
+    <div *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched">
+      Description is required.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="categoryForm.invalid">{{ isEditMode ? 'Update' : 'Add' }} Category</button>
+</form>

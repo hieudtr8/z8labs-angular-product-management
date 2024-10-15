@@ -1,2 +1,39 @@
-<p>Product List</p>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Product Name</label>
+    <input id="name" formControlName="name" type="text" />
+    <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+      Name is required.
+    </div>
+  </div>
 
+  <div>
+    <label for="description">Description</label>
+    <input id="description" formControlName="description" type="text" />
+    <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+      Description is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="price">Price</label>
+    <input id="price" formControlName="price" type="number" />
+    <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+      Price must be greater than or equal to 0.
+    </div>
+  </div>
+
+  <div>
+    <label for="categoryId">Category</label>
+    <select id="categoryId" formControlName="categoryId">
+      <option value="" disabled>Select a category</option>
+      <!-- Loop over categories if you have a category list available -->
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+    </select>
+    <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
+      Category is required.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="productForm.invalid">{{ isEditMode ? 'Update' : 'Add' }} Product</button>
+</form>
