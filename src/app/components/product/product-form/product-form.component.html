@@ -1,39 +1,47 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <div>
+<!-- Back to list -->
+<div class="back-button-container">
+  <button (click)="onBack()" class="back-button">Back to list</button>
+</div>
+
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+  <h2>{{ isEditMode ? 'Edit' : 'Add' }} Product</h2>
+
+  <div class="form-group">
     <label for="name">Product Name</label>
     <input id="name" formControlName="name" type="text" />
-    <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+    <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="error-message">
       Name is required.
     </div>
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="description">Description</label>
     <input id="description" formControlName="description" type="text" />
-    <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+    <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="error-message">
       Description is required.
     </div>
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="price">Price</label>
-    <input id="price" formControlName="price" type="number" />
-    <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+    <input id="price" formControlName="price" type="number" min="0" />
+    <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="error-message">
       Price must be greater than or equal to 0.
     </div>
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="categoryId">Category</label>
     <select id="categoryId" formControlName="categoryId">
       <option value="" disabled>Select a category</option>
-      <!-- Loop over categories if you have a category list available -->
       <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</option>
     </select>
-    <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
+    <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="error-message">
       Category is required.
     </div>
   </div>
 
-  <button type="submit" [disabled]="productForm.invalid">{{ isEditMode ? 'Update' : 'Add' }} Product</button>
+  <button type="submit" [disabled]="productForm.invalid" class="submit-button">
+    {{ isEditMode ? 'Update' : 'Add' }} Product
+  </button>
 </form>

@@ -44,6 +44,11 @@ export class CategoryFormComponent {
     });
   }
 
+  // Redirect to category list
+  onBack(): void {
+    this.router.navigate(['/categories']);
+  }
+
   // Load category detail for editing
   loadCategory(id: number): void {
     this.categoryService.getCategory(id)

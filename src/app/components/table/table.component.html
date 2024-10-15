@@ -1,26 +1,28 @@
-<!-- Widget button add new -->
-<div class="table-widget">
-  <button (click)="onAdd()" class="add-button">Add New</button>
-</div>
+<div class="table-wrapper">
+  <!-- Widget button add new -->
+  <div class="table-widget">
+    <button (click)="onAdd()" class="add-button">Add New</button>
+  </div>
 
-<!-- Table -->
-<table class="data-table">
-  <!-- Headers -->
-  <thead>
-    <tr>
-      <th *ngFor="let col of columns">{{ col.label }}</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <!-- Body row data -->
-  <tbody>
-    <tr *ngFor="let row of data">
-      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
-      <!-- Row actions -->
-      <td>
-        <button (click)="onEdit(row)" class="edit-button">Edit</button>
-        <button (click)="onDelete(row)" class="delete-button">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <!-- Table -->
+  <table class="data-table">
+    <!-- Headers -->
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns">{{ col.label }}</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <!-- Body row data -->
+    <tbody>
+      <tr *ngFor="let row of data">
+        <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+        <!-- Row actions -->
+        <td>
+          <button (click)="onEdit(row)" class="edit-button">Edit</button>
+          <button (click)="onDelete(row)" class="delete-button">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

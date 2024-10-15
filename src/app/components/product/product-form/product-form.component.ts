@@ -53,6 +53,9 @@ export class ProductFormComponent implements OnInit {
       }
     });
   }
+  onBack(): void {
+    this.router.navigate(['/products']);
+  }
 
   loadListCategories(): void {
     this.categories$ = this.categoryService.categories$;

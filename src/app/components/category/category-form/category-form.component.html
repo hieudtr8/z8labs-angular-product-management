@@ -1,19 +1,28 @@
-<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-  <div>
+<!-- Back to list -->
+<div class="back-button-container">
+  <button (click)="onBack()" class="back-button">Back to list</button>
+</div>
+
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+  <h2>{{ isEditMode ? 'Edit' : 'Add' }} Category</h2>
+
+  <div class="form-group">
     <label for="name">Category Name</label>
     <input id="name" formControlName="name" type="text" />
-    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="error-message">
       Name is required.
     </div>
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="description">Description</label>
     <input id="description" formControlName="description" type="text" />
-    <div *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched">
+    <div *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched" class="error-message">
       Description is required.
     </div>
   </div>
 
-  <button type="submit" [disabled]="categoryForm.invalid">{{ isEditMode ? 'Update' : 'Add' }} Category</button>
+  <button type="submit" [disabled]="categoryForm.invalid" class="submit-button">
+    {{ isEditMode ? 'Update' : 'Add' }} Category
+  </button>
 </form>
