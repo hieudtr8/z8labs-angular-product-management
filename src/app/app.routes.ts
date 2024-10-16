@@ -6,11 +6,12 @@ import { CategoryListComponent } from "./components/category/category-list/categ
 import { CategoryFormComponent } from "./components/category/category-form/category-form.component";
 import { LoginComponent } from "./components/login/login.component";
 import { authGuard } from "./guard/auth.guard";
+import { loggedInGuard } from "./guard/logged-in.guard";
 
 export const routes: Routes = [
   // Login route
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [loggedInGuard] },
 
   // Protected routes under a single parent
   {
