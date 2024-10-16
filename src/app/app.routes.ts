@@ -26,5 +26,8 @@ export const routes: Routes = [
       { path: 'categories/new', component: CategoryFormComponent },
       { path: 'categories/edit/:id', component: CategoryFormComponent },
     ]
-  }
+  },
+
+  // Wildcard route for any unmatched routes
+  { path: '**', redirectTo: 'dashboard' }
 ];
