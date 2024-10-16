@@ -16,7 +16,12 @@
     <!-- Body row data -->
     <tbody>
       <tr *ngFor="let row of data">
-        <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+        <td *ngFor="let col of columns">
+          <ng-container *ngIf="!col.pipe">{{ row[col.key] }}</ng-container>
+          <ng-container *ngIf="col.pipe === 'currency'">
+            {{ row[col.key] | appCurrency }}
+          </ng-container>
+        </td>
         <!-- Row actions -->
         <td>
           <button (click)="onEdit(row)" class="edit-button">Edit</button>

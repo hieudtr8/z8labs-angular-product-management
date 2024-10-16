@@ -25,7 +25,7 @@ export class ProductListComponent implements OnInit {
   columns: TableColumn<Product>[] = [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'price', label: 'Price' },
+    { key: 'price', label: 'Price', pipe: 'currency' },
     { key: 'categoryName', label: 'Category Name' },
   ];
 
