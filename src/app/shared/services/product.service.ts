@@ -3,12 +3,13 @@ import { Product } from '../../interfaces/product';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private apiURL = "https://670e32a8073307b4ee45da4b.mockapi.io/angular-hieudtr8-product-management/products";
+  private apiURL = `${environment.apiUrl}/products`;
 
   // BehaviorSubject to store product list state
   private productsSubject = new BehaviorSubject<Product[]>([]);
