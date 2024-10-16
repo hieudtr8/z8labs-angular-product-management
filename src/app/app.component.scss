@@ -1,7 +1,9 @@
 nav {
-  padding: 10px;
+  margin: 20px;
   border-radius: 5px;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   ul {
     list-style: none;
     padding: 0;
@@ -16,7 +18,6 @@ nav {
   a {
     color: #0acafa;
     text-decoration: none;
-    font-weight: bold;
     padding: 8px 12px;
     border-radius: 4px;
     transition: background-color 0.3s;
@@ -30,4 +31,26 @@ nav {
       color: #ffffff;
     }
   }
+  li:first-child {
+    a {
+      margin-left: 0px
+    }
+  }
+
+  .logout-container {
+    button {
+      transition: background-color 0.3s;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #c82333;
+    }
+  }
+
 }

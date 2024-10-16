@@ -4,19 +4,26 @@ import { ProductListComponent } from './components/product/product-list/product-
 import { ProductFormComponent } from './components/product/product-form/product-form.component';
 import { CategoryListComponent } from "./components/category/category-list/category-list.component";
 import { CategoryFormComponent } from "./components/category/category-form/category-form.component";
+import { LoginComponent } from "./components/login/login.component";
+import { authGuard } from "./guard/auth.guard";
 
 export const routes: Routes = [
-  // Dashboard
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
+  // Login route
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
 
-  // Products
-  { path: 'products', component: ProductListComponent },
-  { path: 'products/new', component: ProductFormComponent },
-  { path: 'products/edit/:id', component: ProductFormComponent },
-
-  // Categories
-  { path: 'categories', component: CategoryListComponent },
-  { path: 'categories/new', component: CategoryFormComponent },
-  { path: 'categories/edit/:id', component: CategoryFormComponent },
+  // Protected routes under a single parent
+  {
+    path: '',
+    canActivate: [authGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'products', component: ProductListComponent },
+      { path: 'products/new', component: ProductFormComponent },
+      { path: 'products/edit/:id', component: ProductFormComponent },
+      { path: 'categories', component: CategoryListComponent },
+      { path: 'categories/new', component: CategoryFormComponent },
+      { path: 'categories/edit/:id', component: CategoryFormComponent },
+    ]
+  }
 ];

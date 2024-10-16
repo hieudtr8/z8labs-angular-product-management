@@ -1,4 +1,4 @@
-<nav>
+<nav *ngIf="isAuthenticated()" >
   <ul>
     <li>
       <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
@@ -10,6 +10,10 @@
       <a routerLink="/categories" routerLinkActive="active">Categories</a>
     </li>
   </ul>
+  <!-- Logout -->
+  <div class="logout-container">
+    <button (click)="logout()">Logout</button>
+  </div>
 </nav>
 
 <router-outlet />
