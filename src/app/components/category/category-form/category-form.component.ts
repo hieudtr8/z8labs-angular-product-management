@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { CategoryService } from "../../../shared/services/category.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Category } from "../../../interfaces/category";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-category-form',
@@ -24,7 +25,8 @@ export class CategoryFormComponent {
     private fb: FormBuilder,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -73,10 +75,12 @@ export class CategoryFormComponent {
     if (this.isEditMode) {
       category.id = this.categoryId;
       this.categoryService.updateCategory(category).subscribe(() => {
+        this.toastr.success('Category updated successfully');
         this.router.navigate(['/categories']);  // Redirect after updating
       });
     } else {
       this.categoryService.addCategory(category).subscribe(() => {
+        this.toastr.success('Category added successfully');
         this.router.navigate(['/categories']);  // Redirect after adding
       });
     }

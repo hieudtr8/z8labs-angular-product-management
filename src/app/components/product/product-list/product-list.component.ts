@@ -7,6 +7,7 @@ import { TableComponent } from "../../table/table.component";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { CategoryService } from "../../../shared/services/category.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-product-list',
@@ -32,6 +33,7 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -80,5 +82,6 @@ export class ProductListComponent implements OnInit {
     if (!product.id) return;
 
     this.deleteProduct(product.id);
+    this.toastr.success('Product deleted successfully');
   }
 }

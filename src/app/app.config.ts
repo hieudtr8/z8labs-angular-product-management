@@ -5,6 +5,8 @@ import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { provideCharts, withDefaultRegisterables } from "ng2-charts";
+import { provideAnimations } from "@angular/platform-browser/animations";
+import { provideToastr } from "ngx-toastr";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +14,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withFetch()),
     provideCharts(withDefaultRegisterables()),
-    CommonModule
+    CommonModule,
+    provideAnimations(),
+    provideToastr({
+      timeOut: 2000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    })
   ]
 };

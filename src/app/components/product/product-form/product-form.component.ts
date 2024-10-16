@@ -7,6 +7,7 @@ import { sharedImports } from "../../../shared/helpers/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
 import { Observable } from "rxjs/internal/Observable";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-product-form',
@@ -29,7 +30,8 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -87,10 +89,16 @@ export class ProductFormComponent implements OnInit {
     if (this.isEditMode) {
       product.id = this.productId;
       this.productService.updateProduct(product)
-        .subscribe(() => this.router.navigate(['/products']));
+        .subscribe(() => {
+          this.toastr.success('Product updated successfully');
+          this.router.navigate(['/products'])
+        });
     } else {
       this.productService.addProduct(product)
-        .subscribe(() => this.router.navigate(['/products']));
+        .subscribe(() => {
+          this.toastr.success('Product added successfully');
+          this.router.navigate(['/products'])
+        });
     }
   }
 }

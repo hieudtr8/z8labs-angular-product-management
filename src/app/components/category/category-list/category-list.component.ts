@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { TableComponent } from "../../table/table.component";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-category-list',
@@ -28,6 +29,7 @@ export class CategoryListComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -55,5 +57,6 @@ export class CategoryListComponent implements OnInit {
     if (!category.id) return;
 
     this.categoryService.deleteCategory(category.id).subscribe();
+    this.toastr.success('Category deleted successfully');
   }
 }

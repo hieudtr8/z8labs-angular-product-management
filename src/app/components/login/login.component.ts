@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { sharedImports } from "../../shared/helpers/shared-imports";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private toastr: ToastrService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -33,6 +34,7 @@ export class LoginComponent {
     const { username, password } = this.loginForm.value;
 
     if (this.authService.login(username, password)) {
+      this.toastr.success('Login successfully');
       // Navigate to dashboard or wherever needed
       this.router.navigate(['/dashboard']);
     } else {
