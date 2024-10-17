@@ -3,11 +3,11 @@ import { sharedImports } from "../../../shared/helpers/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
 import { Observable } from "rxjs";
-import { TableComponent } from "../../table/table.component";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, RowComponent, TextColorDirective } from "@coreui/angular";
+import { TableComponent } from "../../../components/table/table.component";
 
 @Component({
   selector: 'app-category-list',

@@ -5,7 +5,7 @@ import { ProductService } from "../../shared/services/product.service";
 import { CategoryService } from "../../shared/services/category.service";
 import { sharedImports } from "../../shared/helpers/shared-imports";
 import { combineLatest, map, Observable } from "rxjs";
-import { PieChartComponent } from "../pie-chart/pie-chart.component";
+import { PieChartComponent } from "../../components/pie-chart/pie-chart.component";
 
 @Component({
   selector: 'app-dashboard',
