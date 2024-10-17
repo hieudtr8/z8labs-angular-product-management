@@ -1,3 +1,13 @@
+// Import styles with default layout.
+@import "@coreui/coreui/scss/coreui";
+
+// Import Chart.js custom tooltips styles
+@import "@coreui/chartjs/scss/coreui-chartjs";
+
+
+// Custom styles for this theme
+@import "theme";
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;

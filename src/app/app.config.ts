@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { provideCharts, withDefaultRegisterables } from "ng2-charts";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideToastr } from "ngx-toastr";
+import { DropdownModule, SidebarModule } from "@coreui/angular";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,12 +15,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withFetch()),
     provideCharts(withDefaultRegisterables()),
-    CommonModule,
     provideAnimations(),
     provideToastr({
       timeOut: 2000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    })
+    }),
+    importProvidersFrom(SidebarModule, DropdownModule),
   ]
 };

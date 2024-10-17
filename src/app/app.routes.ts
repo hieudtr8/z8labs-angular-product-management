@@ -7,6 +7,7 @@ import { CategoryFormComponent } from "./components/category/category-form/categ
 import { LoginComponent } from "./components/login/login.component";
 import { authGuard } from "./guard/auth.guard";
 import { loggedInGuard } from "./guard/logged-in.guard";
+import { DefaultLayoutComponent } from "./layout";
 
 export const routes: Routes = [
   // Login route
@@ -16,6 +17,7 @@ export const routes: Routes = [
   // Protected routes under a single parent
   {
     path: '',
+    component: DefaultLayoutComponent,
     canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
