@@ -1,7 +1,7 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService } from "./shared/services/auth.service";
+import { AuthService } from "./services/auth.service";
 import { Title } from "@angular/platform-browser";
 import { ColorModeService } from "@coreui/angular";
 import { IconSetService } from "@coreui/icons-angular";

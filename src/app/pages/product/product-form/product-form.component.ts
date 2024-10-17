@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from "../../../interfaces/product";
-import { ProductService } from "../../../shared/services/product.service";
+import { ProductService } from "../../../services/product.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { formImports, sharedImports } from "../../../shared/imports/shared-imports";
 import { Category } from "../../../interfaces/category";
-import { CategoryService } from "../../../shared/services/category.service";
+import { CategoryService } from "../../../services/category.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ToastrService } from "ngx-toastr";
 

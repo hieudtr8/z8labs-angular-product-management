@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Category } from "../../interfaces/category";
 import { Observable, BehaviorSubject, throwError, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { catchError, tap } from 'rxjs/operators';
 import { ProductService } from "./product.service";
-import { environment } from "../../../environments/environment";
+import { environment } from "../../environments/environment.example";
+import { Category } from "../interfaces/category";
 
 @Injectable({
   providedIn: 'root'

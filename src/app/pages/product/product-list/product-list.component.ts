@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from "../../../shared/services/product.service";
+import { ProductService } from "../../../services/product.service";
 import { forkJoin, Observable } from 'rxjs';
 import { Product } from "../../../interfaces/product";
 import { sharedImports } from "../../../shared/imports/shared-imports";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
-import { CategoryService } from "../../../shared/services/category.service";
+import { CategoryService } from "../../../services/category.service";
 import { ToastrService } from "ngx-toastr";
-import { ColComponent, RowComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, TableDirective, TableColorDirective, TableActiveDirective, BorderDirective, AlignDirective } from "@coreui/angular";
 import { TableComponent } from "../../../components/table/table.component";
 
 @Component({

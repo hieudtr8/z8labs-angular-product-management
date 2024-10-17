@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { formImports, sharedImports } from "../../../shared/imports/shared-imports";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { CategoryService } from "../../../shared/services/category.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Category } from "../../../interfaces/category";
 import { ToastrService } from "ngx-toastr";
+import { CategoryService } from "../../../services/category.service";
 
 @Component({
   selector: 'app-category-form',
