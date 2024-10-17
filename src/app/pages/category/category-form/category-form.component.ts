@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { sharedImports } from "../../../shared/helpers/shared-imports";
+import { sharedImports } from "../../../shared/imports/shared-imports";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CategoryService } from "../../../shared/services/category.service";
 import { ActivatedRoute, Router } from "@angular/router";

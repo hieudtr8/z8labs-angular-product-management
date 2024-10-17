@@ -3,7 +3,7 @@ import { Product } from "../../interfaces/product";
 import { Category } from "../../interfaces/category";
 import { ProductService } from "../../shared/services/product.service";
 import { CategoryService } from "../../shared/services/category.service";
-import { sharedImports } from "../../shared/helpers/shared-imports";
+import { sharedImports } from "../../shared/imports/shared-imports";
 import { combineLatest, map, Observable } from "rxjs";
 import { PieChartComponent } from "../../components/pie-chart/pie-chart.component";
 

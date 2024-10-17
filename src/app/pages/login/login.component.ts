@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
-import { sharedImports } from "../../shared/helpers/shared-imports";
+import { sharedImports } from "../../shared/imports/shared-imports";
 import { ToastrService } from "ngx-toastr";
 
 @Component({

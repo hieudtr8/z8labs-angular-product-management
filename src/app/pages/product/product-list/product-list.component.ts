@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from "../../../shared/services/product.service";
 import { forkJoin, Observable } from 'rxjs';
 import { Product } from "../../../interfaces/product";
-import { sharedImports } from "../../../shared/helpers/shared-imports";
+import { sharedImports } from "../../../shared/imports/shared-imports";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { CategoryService } from "../../../shared/services/category.service";
@@ -16,17 +16,6 @@ import { TableComponent } from "../../../components/table/table.component";
   imports: [
     ...sharedImports,
     TableComponent,
-    RowComponent,
-    ColComponent,
-    TextColorDirective,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    TableDirective,
-    TableColorDirective,
-    TableActiveDirective,
-    BorderDirective,
-    AlignDirective
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']

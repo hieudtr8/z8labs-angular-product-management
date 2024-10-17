@@ -3,7 +3,7 @@ import { Product } from "../../../interfaces/product";
 import { ProductService } from "../../../shared/services/product.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { sharedImports } from "../../../shared/helpers/shared-imports";
+import { formImports, sharedImports } from "../../../shared/imports/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
 import { Observable } from "rxjs/internal/Observable";
@@ -14,7 +14,7 @@ import { ToastrService } from "ngx-toastr";
   standalone: true,
   imports: [
     ...sharedImports,
-    ReactiveFormsModule
+    ...formImports,
   ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']

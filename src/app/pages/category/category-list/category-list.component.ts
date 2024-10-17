@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { sharedImports } from "../../../shared/helpers/shared-imports";
+import { sharedImports } from "../../../shared/imports/shared-imports";
 import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../shared/services/category.service";
 import { Observable } from "rxjs";
