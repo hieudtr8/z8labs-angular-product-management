@@ -2,13 +2,20 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableColumn } from "../../interfaces/table";
 import { CurrencyPipe } from "../../shared/pipe/currency-format.pipe";
+import { ButtonDirective, TableActiveDirective, TableColorDirective, TableDirective } from "@coreui/angular";
+import { IconDirective } from "@coreui/icons-angular";
 
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [
     CommonModule,
-    CurrencyPipe
+    CurrencyPipe,
+    TableDirective,
+    TableColorDirective,
+    TableActiveDirective,
+    ButtonDirective,
+    IconDirective
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']

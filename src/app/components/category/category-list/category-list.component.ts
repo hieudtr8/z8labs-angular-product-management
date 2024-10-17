@@ -7,13 +7,20 @@ import { TableComponent } from "../../table/table.component";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, RowComponent, TextColorDirective } from "@coreui/angular";
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
   imports: [
     ...sharedImports,
-    TableComponent
+    TableComponent,
+    RowComponent,
+    ColComponent,
+    TextColorDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
   ],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']

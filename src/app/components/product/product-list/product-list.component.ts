@@ -8,13 +8,25 @@ import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { CategoryService } from "../../../shared/services/category.service";
 import { ToastrService } from "ngx-toastr";
+import { ColComponent, RowComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, TableDirective, TableColorDirective, TableActiveDirective, BorderDirective, AlignDirective } from "@coreui/angular";
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
     ...sharedImports,
-    TableComponent
+    TableComponent,
+    RowComponent,
+    ColComponent,
+    TextColorDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    TableDirective,
+    TableColorDirective,
+    TableActiveDirective,
+    BorderDirective,
+    AlignDirective
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
