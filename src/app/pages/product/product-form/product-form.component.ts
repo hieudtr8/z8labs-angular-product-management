@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from "../../../interfaces/product";
 import { ProductService } from "../../../shared/services/product.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { formImports, sharedImports } from "../../../shared/imports/shared-imports";
 import { Category } from "../../../interfaces/category";
