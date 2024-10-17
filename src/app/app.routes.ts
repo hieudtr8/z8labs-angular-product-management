@@ -1,18 +1,21 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProductListComponent } from './components/product/product-list/product-list.component';
-import { ProductFormComponent } from './components/product/product-form/product-form.component';
-import { CategoryListComponent } from "./components/category/category-list/category-list.component";
-import { CategoryFormComponent } from "./components/category/category-form/category-form.component";
-import { LoginComponent } from "./components/login/login.component";
 import { authGuard } from "./guard/auth.guard";
 import { loggedInGuard } from "./guard/logged-in.guard";
 import { DefaultLayoutComponent } from "./layout";
+import { LoginComponent } from "./pages/login/login.component";
+import { DashboardComponent } from "./pages/dashboard/dashboard.component";
+import { ProductListComponent } from "./pages/product/product-list/product-list.component";
+import { ProductFormComponent } from "./pages/product/product-form/product-form.component";
+import { CategoryListComponent } from "./pages/category/category-list/category-list.component";
+import { CategoryFormComponent } from "./pages/category/category-form/category-form.component";
 
 export const routes: Routes = [
   // Login route
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [loggedInGuard] },
+  { path: 'login',
+    component: LoginComponent,
+    canActivate: [loggedInGuard]
+  },
 
   // Protected routes under a single parent
   {
