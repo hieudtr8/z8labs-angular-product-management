@@ -58,9 +58,4 @@ export class AuthService {
 
     return from(promise);
   }
-
-  getAuthorizedUser (): any {
-    const user = localStorage.getItem(this.authKey);
-    return user ? JSON.parse(user) : null;
-  }
 }

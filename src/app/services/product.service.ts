@@ -1,9 +1,8 @@
-import { forwardRef, Inject, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, throwError, of, from, combineLatest } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Product } from "../interfaces/product";
 import { collection, collectionData, deleteDoc, doc, Firestore, getDoc, setDoc, updateDoc } from "@angular/fire/firestore";
-import { CategoryService } from "./category.service";
 
 @Injectable({
   providedIn: 'root',
