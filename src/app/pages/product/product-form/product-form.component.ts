@@ -22,7 +22,7 @@ import { ToastrService } from "ngx-toastr";
 export class ProductFormComponent implements OnInit {
   productForm!: FormGroup;
   isEditMode: boolean = false;
-  productId?: number;
+  productId?: string;
   categories$!: Observable<Category[]>;
 
   constructor(
@@ -50,7 +50,7 @@ export class ProductFormComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.isEditMode = true;
-        this.productId = +params['id'];
+        this.productId = params['id'] as string;
         this.loadProduct(this.productId);
       }
     });
@@ -66,7 +66,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   // Load product details for editing
-  loadProduct(id: number): void {
+  loadProduct(id: string): void {
     this.productService.getProduct(id)
       .subscribe(product => {
         if (!product) {

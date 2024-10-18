@@ -19,7 +19,7 @@ import { CategoryService } from "../../../services/category.service";
 export class CategoryFormComponent {
   categoryForm!: FormGroup;
   isEditMode: boolean = false;
-  categoryId?: number;
+  categoryId?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +40,7 @@ export class CategoryFormComponent {
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.isEditMode = true;
-        this.categoryId = +params['id'];
+        this.categoryId = params['id'] as string;
         this.loadCategory(this.categoryId);
       }
     });
@@ -52,7 +52,7 @@ export class CategoryFormComponent {
   }
 
   // Load category detail for editing
-  loadCategory(id: number): void {
+  loadCategory(id: string): void {
     this.categoryService.getCategory(id)
       .subscribe(category => {
         if (!category) {

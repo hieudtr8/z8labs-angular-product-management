@@ -8,6 +8,11 @@ import { provideCharts, withDefaultRegisterables } from "ng2-charts";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideToastr } from "ngx-toastr";
 import { DropdownModule, SidebarModule } from "@coreui/angular";
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { environment } from "../environments/environment";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +27,9 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     importProvidersFrom(SidebarModule, DropdownModule),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
+    provideStorage(() => getStorage()),
   ]
 };
