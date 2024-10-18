@@ -136,8 +136,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
   ];
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
   }
 
 }

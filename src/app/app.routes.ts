@@ -8,12 +8,18 @@ import { ProductListComponent } from "./pages/product/product-list/product-list.
 import { ProductFormComponent } from "./pages/product/product-form/product-form.component";
 import { CategoryListComponent } from "./pages/category/category-list/category-list.component";
 import { CategoryFormComponent } from "./pages/category/category-form/category-form.component";
+import { RegisterComponent } from "./pages/register/register.component";
 
 export const routes: Routes = [
   // Login route
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login',
     component: LoginComponent,
+    canActivate: [loggedInGuard]
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
     canActivate: [loggedInGuard]
   },
 

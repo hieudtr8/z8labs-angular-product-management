@@ -1,29 +1,59 @@
-<div class="login-container">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-    <h2>Login</h2>
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container breakpoint="md">
+    <c-row class="justify-content-center">
+      <c-col md="6" lg="4">
+        <c-card-group>
+          <c-card class="p-4">
+            <c-card-body>
+              <form cForm [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <h1 class="text-center">Login</h1>
+                <div class="mt-4 mb-4">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilUser"></svg>
+                    </span>
+                    <input cFormControl id="email" formControlName="email" type="text" placeholder="Email" />
+                  </c-input-group>
+                  <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-message">
+                    Email is required.
+                  </div>
+                </div>
 
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input id="username" formControlName="username" type="text" />
-      <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
-        Username is required.
-      </div>
-    </div>
+                <div class="mb-3">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilLockLocked"></svg>
+                    </span>
+                    <input cFormControl id="password" formControlName="password" type="password" placeholder="Password" />
+                  </c-input-group>
+                  <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+                    Password is required.
+                  </div>
+                </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" formControlName="password" type="password" />
-      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
-        Password is required.
-      </div>
-    </div>
+                <div *ngIf="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </div>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+                <c-row>
+                  <c-col xs="9">
+                    <button cButton color="info" type="submit" [disabled]="loginForm.invalid" class="submit-button text-white">
+                      Login
+                    </button>
+                  </c-col>
 
-    <button type="submit" [disabled]="loginForm.invalid" class="submit-button">
-      Login
-    </button>
-  </form>
+                  <c-col class="text-right" xs="3">
+                    <button cButton class="px-0" color="link" (click)="onRegister()">
+                      Register
+                    </button>
+                  </c-col>
+                </c-row>
+
+              </form>
+            </c-card-body>
+          </c-card>
+        </c-card-group>
+      </c-col>
+    </c-row>
+  </c-container>
 </div>

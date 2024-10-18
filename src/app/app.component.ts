@@ -20,6 +20,7 @@ import { delay, filter, map, tap } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'product-management';
 
+  authService = inject(AuthService);
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   readonly #router = inject(Router);
@@ -28,10 +29,7 @@ export class AppComponent implements OnInit {
   readonly #colorModeService = inject(ColorModeService);
   readonly #iconSetService = inject(IconSetService);
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor() {
     this.#titleService.setTitle(this.title);
     // iconSet singleton
     this.#iconSetService.icons = { ...iconSubset };
@@ -60,14 +58,20 @@ export class AppComponent implements OnInit {
         takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe();
-  }
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+    this.authService.user$.subscribe((user: any) => {
+      if (user) {
+        console.log('file: app.component.ts:64 | user:', user)
+        this.authService.currentUserSig.set({
+          email: user.email!,
+          username: user.displayName!
+        })
+        console.log('file: app.component.ts:64 | this.authService.currentUserSig:', this.authService.currentUserSig())
+      } else {
+        this.authService.currentUserSig.set(undefined);
+      }
+    }
 
-  isAuthenticated() {
-    return this.authService.isLoggedIn();
+    )
   }
 }

@@ -1,0 +1,67 @@
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container>
+    <c-row class="justify-content-center">
+      <c-col lg="6" >
+        <c-card class="mx-4">
+          <c-card-body class="p-4">
+            <form
+              cForm
+              [formGroup]="registerForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="register-header-container">
+                <h1>Register</h1>
+                <button cButton color="info" class="text-white" (click)="backToLogin()">
+                  Back to Login
+                </button>
+              </div>
+              <p class="text-body-secondary">Create your account</p>
+              <div class="mb-3">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input id="username" formControlName="username" autoComplete="name" cFormControl placeholder="Username" />
+                </c-input-group>
+                <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error-message">
+                  Username is required.
+                </div>
+              </div>
+              <div class="mb-3">
+                <c-input-group>
+                  <span cInputGroupText>&#64;</span>
+                  <input id="email" formControlName="email" autoComplete="email" cFormControl placeholder="Email" />
+                </c-input-group>
+                <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+                  Email is required.
+                </div>
+              </div>
+              <div class="mb-3">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <svg cIcon name="cilLockLocked"></svg>
+                  </span>
+                  <input id="password" formControlName="password" autoComplete="new-password" cFormControl placeholder="Password" type="password" />
+                </c-input-group>
+                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+                  Password is required.
+                </div>
+              </div>
+              <div class="d-grid">
+                <button
+                  cButton
+                  color="success"
+                  class="text-white"
+                  type="submit"
+                  [disabled]="registerForm.invalid"
+                >
+                  Create Account
+                </button>
+              </div>
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>

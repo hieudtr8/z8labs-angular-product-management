@@ -18,3 +18,8 @@ input[type="text"], input[type="number"], select, input[type="password"] {
   -webkit-box-sizing:border-box;
   -moz-box-sizing: border-box;
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+}
