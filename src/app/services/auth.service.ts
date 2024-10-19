@@ -15,7 +15,9 @@ export class AuthService {
   private readonly authKey = 'authorizedUser';
 
   constructor() {
-    this.isLoggedIn$ = this.user$.pipe(map(user => !!user));
+    this.isLoggedIn$ = this.user$.pipe(
+      map(user => !!user)
+    );
 
     this.user$.subscribe((user: User | null) => {
       if (user) {
@@ -34,9 +36,10 @@ export class AuthService {
       this.firebaseAuth,
       email,
       password
-    ).then(response =>
+    ).then(response => {
       updateProfile(response.user, { displayName: username })
-    )
+      signOut(this.firebaseAuth)
+    })
 
     return from(promise);
   }
@@ -47,10 +50,6 @@ export class AuthService {
     });
 
     return from(promise);
-  }
-
-  isLoggedIn (): boolean {
-    return this.currentUserSig() !== undefined;
   }
 
   logout (): Observable<void> {

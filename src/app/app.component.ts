@@ -61,12 +61,10 @@ export class AppComponent implements OnInit {
 
     this.authService.user$.subscribe((user: any) => {
       if (user) {
-        console.log('file: app.component.ts:64 | user:', user)
         this.authService.currentUserSig.set({
           email: user.email!,
           username: user.displayName!
         })
-        console.log('file: app.component.ts:64 | this.authService.currentUserSig:', this.authService.currentUserSig())
       } else {
         this.authService.currentUserSig.set(undefined);
       }
