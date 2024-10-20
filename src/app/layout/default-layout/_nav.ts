@@ -18,7 +18,6 @@ export const navItems: INavData[] = [
   {
     name: 'Category',
     url: '/categories',
-    linkProps: { fragment: 'headings' },
     iconComponent: { name: 'cil-list' }
   }
 ];

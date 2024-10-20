@@ -55,6 +55,17 @@
             </div>
           </div>
 
+          <!-- New image upload field -->
+          <div class="form-group">
+            <label cLabel for="image">Product Image</label>
+            <input cFormControl id="image" formControlName="image" type="file" accept="image/*" (change)="onFileChange($event)" />
+          </div>
+
+          <!-- Image preview -->
+          <div *ngIf="imagePreview" class="image-preview">
+            <img [src]="imagePreview" alt="Product Image Preview" style="max-width: 200px; max-height: 200px;" />
+          </div>
+
           <div class="button-container">
             <button
               cButton

@@ -24,6 +24,8 @@ export class ProductFormComponent implements OnInit {
   isEditMode: boolean = false;
   productId?: string;
   categories$!: Observable<Category[]>;
+  imageFile?: File;
+  imagePreview?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +45,8 @@ export class ProductFormComponent implements OnInit {
       name: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
-      categoryId: [null, Validators.required]
+      categoryId: [null, Validators.required],
+      image: [null]
     });
 
     // Check if we are in edit mode
@@ -75,7 +78,32 @@ export class ProductFormComponent implements OnInit {
         }
 
         this.productForm.patchValue(product);
+        if (product.imageUrl) {
+          this.imagePreview = product.imageUrl;
+        }
       });
+  }
+
+  // Handle image selection
+  onFileChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const files = target.files as FileList;
+
+    if (files.length === 0) {
+      return;
+    }
+
+    this.imageFile = files[0];
+    this.previewImage();
+  }
+
+  // Preview the selected image
+  previewImage(): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(this.imageFile!);
   }
 
   // Handle form submission
@@ -88,13 +116,13 @@ export class ProductFormComponent implements OnInit {
 
     if (this.isEditMode) {
       product.id = this.productId;
-      this.productService.updateProduct(product)
+      this.productService.updateProduct(product, this.imageFile)
         .subscribe(() => {
           this.toastr.success('Product updated successfully');
           this.router.navigate(['/products'])
         });
     } else {
-      this.productService.addProduct(product)
+      this.productService.addProduct(product, this.imageFile)
         .subscribe(() => {
           this.toastr.success('Product added successfully');
           this.router.navigate(['/products'])

@@ -1,21 +1,22 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, throwError, of, from, combineLatest } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Product } from "../interfaces/product";
 import { collection, collectionData, deleteDoc, doc, Firestore, getDoc, setDoc, updateDoc } from "@angular/fire/firestore";
+import { deleteObject, getDownloadURL, ref, Storage, uploadBytesResumable } from "@angular/fire/storage";
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   private firestore: Firestore = inject(Firestore);
+  private storage: Storage = inject(Storage);
 
   // BehaviorSubject to store product list state
   private productsSubject = new BehaviorSubject<Product[]>([]);
   public products$ = this.productsSubject.asObservable();
 
-  constructor(
-  ) {}
+  constructor() {}
 
   // Fetch products from API and update state
   fetchProducts(): Observable<Product[]> {
@@ -65,13 +66,33 @@ export class ProductService {
   }
 
   // Add a new product and update the product state
-  addProduct(product: Product): Observable<Product> {
+  addProduct(product: Product, imageFile?: File): Observable<Product> {
     const productId = doc(collection(this.firestore, 'products')).id;
     const newProduct = {
       id: productId,
       ...product
     };
 
+    // If an image file is provided, upload it to Firebase Storage
+    if (imageFile) {
+      return this.uploadImage(productId, imageFile).pipe(
+        switchMap(imageUrl => {
+          newProduct.imageUrl = imageUrl;
+          return from(setDoc(doc(this.firestore, 'products', productId), newProduct));
+        }),
+        tap(() => {
+          const currentProducts = this.productsSubject.value;
+          this.productsSubject.next([...currentProducts, newProduct]); // Update state
+        }),
+        map(() => newProduct),
+        catchError(error => {
+          console.log('file: product.service.ts:88 | error:', error)
+          return throwError(() => new Error('Error adding product'))
+        })
+      );
+    }
+
+    // If no image file is provided, just add the product
     return from(setDoc(doc(this.firestore, 'products', productId), newProduct)).pipe(
       tap(() => {
         const currentProducts = this.productsSubject.value;
@@ -83,7 +104,26 @@ export class ProductService {
   }
 
   // Update an existing product and update the product state
-  updateProduct(product: Product): Observable<Product> {
+  updateProduct(product: Product, imageFile?: File): Observable<Product> {
+    // If an image file is provided, upload it to Firebase Storage
+    if (imageFile) {
+      return this.uploadImage(product.id!, imageFile).pipe(
+        switchMap(imageUrl => {
+          product.imageUrl = imageUrl;
+          return from(updateDoc(doc(this.firestore, 'products', product.id!), product as { [x: string]: any }));
+        }),
+        tap(() => {
+          const updatedProducts = this.productsSubject.value.map(p =>
+            p.id === product.id ? product : p
+          );
+          this.productsSubject.next(updatedProducts); // Update state
+        }),
+        map(() => product),
+        catchError(error => throwError(() => new Error('Error updating product'))
+      ));
+    }
+
+    // If no image file is provided, update the product without changing the image
     return from(updateDoc(doc(this.firestore, 'products', product.id!), product as { [x: string]: any })).pipe(
       tap(() => {
         const updatedProducts = this.productsSubject.value.map(p =>
@@ -98,13 +138,27 @@ export class ProductService {
 
   // Delete a product and update the product state
   deleteProduct(id: string): Observable<void> {
-    return from(deleteDoc(doc(this.firestore, 'products', id))).pipe(
+    return this.getProduct(id).pipe(
+      switchMap((product) => {
+        if (!product) {
+          return throwError(() => new Error('Product not found'));
+        }
+
+        if (product.imageUrl) {
+          return from(deleteObject(ref(this.storage, product.imageUrl))).pipe(
+            catchError(() => of (undefined)),
+            switchMap(() => from(deleteDoc(doc(this.firestore, 'products', id))))
+          );
+        }
+
+        return from(deleteDoc(doc(this.firestore, 'products', id)));
+      }),
       tap(() => {
         const updatedProducts = this.productsSubject.value.filter(product => product.id !== id);
         this.productsSubject.next(updatedProducts); // Update state
       }),
-      catchError(error => throwError(() => new Error('Error deleting product')))
-    );
+      catchError(error => throwError(() => new Error('Error deleting product'))
+    ));
   }
 
   deleteProductsByCategory(categoryId: string): Observable<void> {
@@ -115,5 +169,31 @@ export class ProductService {
 
     listProductsToDelete.forEach(product => product.id && this.deleteProduct(product.id).subscribe());
     return of(undefined); // Ensure an Observable<void> is always returned
+  }
+
+  uploadImage(productId: string, imageFile: File): Observable<string> {
+    const filePath = `product-images/${productId}`;
+    const storageRef = ref(this.storage, filePath);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+
+    return new Observable<string>(observer => {
+      uploadTask.on('state_changed',
+        snapshot => {
+          // Progress monitoring
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('file: product.service.ts:136 | progress:', progress)
+        },
+        error => {
+          observer.error(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+            observer.next(downloadURL);
+            observer.complete();
+          })
+        }
+      );
+    })
   }
 }
