@@ -28,6 +28,7 @@ export class ProductListComponent implements OnInit {
     { key: 'description', label: 'Description' },
     { key: 'price', label: 'Price', pipe: 'currency' },
     { key: 'categoryName', label: 'Category Name' },
+    { key: 'imageUrl', label: 'Product Image', pipe: 'image' },
   ];
 
   constructor(

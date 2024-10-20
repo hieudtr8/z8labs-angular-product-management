@@ -40,6 +40,14 @@
           <ng-container *ngIf="col.pipe === 'currency'">
             {{ row[col.key] | appCurrency }}
           </ng-container>
+          <ng-container *ngIf="col.pipe === 'image'">
+            <img
+              [src]="row[col.key]"
+              alt="Image"
+              width="36"
+              height="36"
+            />
+          </ng-container>
         </td>
         <!-- Row actions -->
         <td class="d-flex gap-2">

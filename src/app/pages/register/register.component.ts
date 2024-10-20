@@ -33,7 +33,6 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.registerForm = this.fb.group({
-      username: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
     })
@@ -49,7 +48,7 @@ export class RegisterComponent {
     }
 
     const rawForm = this.registerForm.getRawValue();
-    this.authService.register(rawForm.email, rawForm.username, rawForm.password).subscribe(() => {
+    this.authService.register(rawForm.email, rawForm.password).subscribe(() => {
       this.router.navigate(['/login']);
     });
   }

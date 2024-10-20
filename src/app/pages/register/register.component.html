@@ -18,17 +18,6 @@
               <p class="text-body-secondary">Create your account</p>
               <div class="mb-3">
                 <c-input-group>
-                  <span cInputGroupText>
-                    <svg cIcon name="cilUser"></svg>
-                  </span>
-                  <input id="username" formControlName="username" autoComplete="name" cFormControl placeholder="Username" />
-                </c-input-group>
-                <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error-message">
-                  Username is required.
-                </div>
-              </div>
-              <div class="mb-3">
-                <c-input-group>
                   <span cInputGroupText>&#64;</span>
                   <input id="email" formControlName="email" autoComplete="email" cFormControl placeholder="Email" />
                 </c-input-group>
