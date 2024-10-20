@@ -182,7 +182,6 @@ export class ProductService {
         snapshot => {
           // Progress monitoring
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('file: product.service.ts:136 | progress:', progress)
         },
         error => {
           observer.error(error);
@@ -195,5 +194,38 @@ export class ProductService {
         }
       );
     })
+  }
+
+  // Remove product image
+  removeProductImage(productId: string): Observable<void> {
+    return this.getProduct(productId).pipe(
+      switchMap(product => {
+        if (!product || !product.imageUrl) {
+          return throwError(() => new Error('Product not found or no image to remove'));
+        }
+
+        const updatedProduct = {
+          ...product,
+          imageUrl: null,
+        };
+        return from(updateDoc(doc(this.firestore, 'products', productId), updatedProduct)).pipe(
+          switchMap(() => {
+            // Delete the image file from Firebase Storage
+            const imageRef = ref(this.storage, product.imageUrl!);
+            return from(deleteObject(imageRef));
+          }),
+          tap(() => {
+            // Update the local state
+            const updatedProducts = this.productsSubject.value.map(p =>
+              p.id === productId ? updatedProduct : p
+            );
+            this.productsSubject.next(updatedProducts);
+          })
+        );
+      }),
+      catchError(error => throwError(() => new Error(error))
+
+      )
+    )
   }
 }

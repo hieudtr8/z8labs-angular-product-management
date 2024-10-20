@@ -8,6 +8,9 @@ import { Category } from "../../../interfaces/category";
 import { CategoryService } from "../../../services/category.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ToastrService } from "ngx-toastr";
+import { IconDirective } from "@coreui/icons-angular";
+import { TooltipDirective } from "@coreui/angular";
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'app-product-form',
@@ -15,6 +18,9 @@ import { ToastrService } from "ngx-toastr";
   imports: [
     ...sharedImports,
     ...formImports,
+    IconDirective,
+    TooltipDirective,
+    NgOptimizedImage
   ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
@@ -26,6 +32,7 @@ export class ProductFormComponent implements OnInit {
   categories$!: Observable<Category[]>;
   imageFile?: File;
   imagePreview?: string;
+  existingImageUrl?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +53,6 @@ export class ProductFormComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       categoryId: [null, Validators.required],
-      image: [null]
     });
 
     // Check if we are in edit mode
@@ -79,31 +85,49 @@ export class ProductFormComponent implements OnInit {
 
         this.productForm.patchValue(product);
         if (product.imageUrl) {
-          this.imagePreview = product.imageUrl;
+          this.existingImageUrl = product.imageUrl;
         }
       });
   }
 
-  // Handle image selection
   onFileChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     const files = target.files as FileList;
-
-    if (files.length === 0) {
-      return;
+    if (files.length > 0) {
+      this.imageFile = files[0];
+      this.previewImage();
     }
-
-    this.imageFile = files[0];
-    this.previewImage();
   }
 
-  // Preview the selected image
   previewImage(): void {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result as string;
     };
     reader.readAsDataURL(this.imageFile!);
+  }
+
+  removeImage(): void {
+    if (this.isEditMode && this.productId) {
+      this.productService.removeProductImage(this.productId).subscribe(
+        () => {
+          this.toastr.success('Product image removed successfully');
+          this.existingImageUrl = undefined;
+          this.imagePreview = undefined;
+          this.imageFile = undefined;
+        },
+        error => {
+          this.toastr.error('Failed to remove product image');
+          console.error('Error removing product image:', error);
+        }
+      );
+      return;
+    }
+
+    // If we're not in edit mode or don't have a productId, just clear the local state
+    this.imagePreview = undefined;
+    this.imageFile = undefined;
+
   }
 
   // Handle form submission
@@ -114,6 +138,7 @@ export class ProductFormComponent implements OnInit {
 
     const product: Product = this.productForm.value;
 
+    // If we're in edit mode, update the product
     if (this.isEditMode) {
       product.id = this.productId;
       this.productService.updateProduct(product, this.imageFile)
@@ -121,12 +146,14 @@ export class ProductFormComponent implements OnInit {
           this.toastr.success('Product updated successfully');
           this.router.navigate(['/products'])
         });
-    } else {
-      this.productService.addProduct(product, this.imageFile)
-        .subscribe(() => {
-          this.toastr.success('Product added successfully');
-          this.router.navigate(['/products'])
-        });
+      return;
     }
+
+    // Otherwise, add a new product
+    this.productService.addProduct(product, this.imageFile)
+      .subscribe(() => {
+        this.toastr.success('Product added successfully');
+        this.router.navigate(['/products'])
+    });
   }
 }

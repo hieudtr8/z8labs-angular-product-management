@@ -55,15 +55,35 @@
             </div>
           </div>
 
-          <!-- New image upload field -->
-          <div class="form-group">
+          <!-- Image upload field -->
+          <div class="form-group mb-2">
             <label cLabel for="image">Product Image</label>
-            <input cFormControl id="image" formControlName="image" type="file" accept="image/*" (change)="onFileChange($event)" />
+            <input cFormControl id="image" type="file" accept="image/*" (change)="onFileChange($event)" />
           </div>
 
           <!-- Image preview -->
-          <div *ngIf="imagePreview" class="image-preview">
-            <img [src]="imagePreview" alt="Product Image Preview" style="max-width: 200px; max-height: 200px;" />
+          <div *ngIf="imagePreview || existingImageUrl" class="image-preview">
+            <img
+              [src]="imagePreview || existingImageUrl"
+              alt="Product Image Preview"
+              style="max-width: 200px; max-height: 200px;"
+            />
+            <button
+              cButton
+              color="danger"
+              size="sm"
+              (click)="removeImage()"
+              type="button"
+              class="text-white"
+              cTooltip="Remove image"
+              cTooltipPlacement="top"
+            >
+              <svg
+                cIcon
+                name="cil-trash"
+                size="sm"
+              ></svg>
+            </button>
           </div>
 
           <div class="button-container">

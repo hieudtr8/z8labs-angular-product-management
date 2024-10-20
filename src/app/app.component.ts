@@ -18,7 +18,7 @@ import { delay, filter, map, tap } from 'rxjs/operators';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'product-management';
+  title = 'Angular Product Management';
 
   authService = inject(AuthService);
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
