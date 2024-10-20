@@ -12,7 +12,6 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from "../environments/environment";
 import { getFirestore, provideFirestore } from "@angular/fire/firestore";
-import "firebase/auth";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,15 +26,7 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     importProvidersFrom(SidebarModule, DropdownModule),
-    provideFirebaseApp(() => initializeApp({
-      projectId: environment.firebase.projectId,
-      appId: environment.firebase.appId,
-      storageBucket: environment.firebase.storageBucket,
-      apiKey: environment.firebase.apiKey,
-      authDomain: environment.firebase.authDomain,
-      messagingSenderId: environment.firebase.messagingSenderId,
-      measurementId: environment.firebase.measurementId
-    })),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
