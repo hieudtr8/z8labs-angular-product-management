@@ -28,6 +28,7 @@ import {
 
 import { IconDirective } from '@coreui/icons-angular';
 import { AuthService } from "../../../services/auth.service";
+import { SystemUser } from "../../../interfaces/user";
 
 @Component({
   selector: 'app-default-header',
@@ -52,11 +53,14 @@ export class DefaultHeaderComponent extends HeaderComponent {
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
+  currentUser: SystemUser | undefined = undefined;
+
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     super();
+    this.currentUser = this.authService.currentUserSig();
   }
 
   sidebarId = input('sidebar1');

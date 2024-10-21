@@ -28,6 +28,17 @@
               <div class="mb-3">
                 <c-input-group>
                   <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input id="username" formControlName="username" autoComplete="name" cFormControl placeholder="Username" />
+                </c-input-group>
+                <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error-message">
+                  Username is required.
+                </div>
+              </div>
+              <div class="mb-3">
+                <c-input-group>
+                  <span cInputGroupText>
                     <svg cIcon name="cilLockLocked"></svg>
                   </span>
                   <input id="password" formControlName="password" autoComplete="new-password" cFormControl placeholder="Password" type="password" />
