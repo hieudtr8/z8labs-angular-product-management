@@ -25,14 +25,12 @@ export class ProductService {
     }
 
     const productsCollection = collection(this.firestore, 'products');
-    console.log('file: product.service.ts:43 | this.productsSubject:', this.productsSubject)
 
     return collectionData(productsCollection, { idField: 'id'}).pipe(
       tap((categories: Product[]) => this.productsSubject.next(categories)),
       catchError(error => {
         console.log(error);
-        throwError(() => new Error('Error fetching categories'))
-        return of([]);
+        return throwError(() => new Error('Error fetching categories'))
       })
     ) as Observable<Product[]>;
   }
