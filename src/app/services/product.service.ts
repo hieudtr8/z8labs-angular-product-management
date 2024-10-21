@@ -175,7 +175,6 @@ export class ProductService {
     const storageRef = ref(this.storage, filePath);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
-
     return new Observable<string>(observer => {
       uploadTask.on('state_changed',
         snapshot => {
