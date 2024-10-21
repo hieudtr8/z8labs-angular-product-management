@@ -42,6 +42,7 @@
           </ng-container>
           <ng-container *ngIf="col.pipe === 'image'">
             <img
+              *ngIf="row[col.key]"
               [src]="row[col.key]"
               alt="Image"
               width="36"
