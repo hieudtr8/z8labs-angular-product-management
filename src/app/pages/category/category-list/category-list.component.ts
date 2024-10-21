@@ -15,12 +15,6 @@ import { TableComponent } from "../../../components/table/table.component";
   imports: [
     ...sharedImports,
     TableComponent,
-    RowComponent,
-    ColComponent,
-    TextColorDirective,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
     ButtonDirective,
     ModalModule
   ],
