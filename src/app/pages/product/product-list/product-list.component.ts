@@ -8,6 +8,7 @@ import { NavigationEnd, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { TableComponent } from "../../../components/table/table.component";
 import { ProductCategoryService } from "../../../services/product-category.service";
+import { ButtonDirective, ModalModule } from "@coreui/angular";
 
 @Component({
   selector: 'app-product-list',
@@ -15,6 +16,8 @@ import { ProductCategoryService } from "../../../services/product-category.servi
   imports: [
     ...sharedImports,
     TableComponent,
+    ModalModule,
+    ButtonDirective
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
@@ -22,6 +25,8 @@ import { ProductCategoryService } from "../../../services/product-category.servi
 
 export class ProductListComponent implements OnInit {
   products$!: Observable<Product[]>;
+  productToDelete: Product | null = null;
+  isVisibleModalDelete: boolean = false;
 
   columns: TableColumn<Product>[] = [
     { key: 'name', label: 'Name' },
@@ -69,13 +74,28 @@ export class ProductListComponent implements OnInit {
   }
 
   onDelete(product: Product): void {
-    if (!confirm('Are you sure you want to delete this product?')) {
-      return;
-    }
-
     if (!product.id) return;
 
-    this.deleteProduct(product.id);
+    this.productToDelete = product;
+    this.isVisibleModalDelete = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.productToDelete || !this.productToDelete.id) return;
+
+    this.deleteProduct(this.productToDelete.id);
     this.toastr.success('Product deleted successfully');
+
+    this.productToDelete = null;
+    this.isVisibleModalDelete = false;
+  }
+
+  cancelDelete(): void {
+    this.productToDelete = null;
+    this.isVisibleModalDelete = false;
+  }
+
+  handleVisibleChange(isVisible: boolean): void {
+    this.isVisibleModalDelete = isVisible;
   }
 }

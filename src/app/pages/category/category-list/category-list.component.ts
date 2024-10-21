@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
 import { TableColumn } from "../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, RowComponent, TextColorDirective } from "@coreui/angular";
+import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, ModalModule, RowComponent, TextColorDirective } from "@coreui/angular";
 import { TableComponent } from "../../../components/table/table.component";
 
 @Component({
@@ -21,12 +21,16 @@ import { TableComponent } from "../../../components/table/table.component";
     CardComponent,
     CardHeaderComponent,
     CardBodyComponent,
+    ButtonDirective,
+    ModalModule
   ],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit {
   categories$!: Observable<Category[]>;  // Observable for categories state
+  categoryToDelete: Category | null = null;
+  isVisibleModalDelete: boolean = false;
 
   columns: TableColumn<Category>[] = [  // Columns for the table
     { key: 'name', label: 'Name' },
@@ -57,13 +61,28 @@ export class CategoryListComponent implements OnInit {
 
   // Delete a category
   onDelete(category: Category): void {
-    if (!confirm('Are you sure you want to delete this category?')) {
-      return;
-    }
-
     if (!category.id) return;
 
-    this.categoryService.deleteCategory(category.id).subscribe();
+    this.categoryToDelete = category;
+    this.isVisibleModalDelete = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.categoryToDelete || !this.categoryToDelete.id) return;
+
+    this.categoryService.deleteCategory(this.categoryToDelete.id).subscribe();
     this.toastr.success('Category deleted successfully');
+
+    this.categoryToDelete = null;
+    this.isVisibleModalDelete = false;
+  }
+
+  cancelDelete(): void {
+    this.categoryToDelete = null;
+    this.isVisibleModalDelete = false;
+  }
+
+  handleVisibleChange(isVisible: boolean): void {
+    this.isVisibleModalDelete = isVisible;
   }
 }

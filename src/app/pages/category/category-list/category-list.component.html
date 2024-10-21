@@ -16,3 +16,20 @@
     </c-card>
   </c-col>
 </c-row>
+
+<c-modal id="deleteConfirmModal" [visible]="isVisibleModalDelete" (visibleChange)="handleVisibleChange($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Confirm Delete</h5>
+  </c-modal-header>
+  <c-modal-body>
+    Are you sure you want to delete this category?
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="cancelDelete()">
+      Cancel
+    </button>
+    <button cButton color="danger" (click)="confirmDelete()">
+      Delete
+    </button>
+  </c-modal-footer>
+</c-modal>
