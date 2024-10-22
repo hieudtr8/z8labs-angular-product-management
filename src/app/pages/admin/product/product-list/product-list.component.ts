@@ -74,11 +74,11 @@ export class ProductListComponent implements OnInit {
   }
 
   onAdd(): void {
-    this.router.navigate(['products', 'new']);
+    this.router.navigate(['admin', 'products', 'new']);
   }
 
   onEdit(product: Product): void {
-    this.router.navigate(['products', 'edit', product.id]);
+    this.router.navigate(['admin', 'products', 'edit', product.id]);
   }
 
   onDelete(product: Product): void {

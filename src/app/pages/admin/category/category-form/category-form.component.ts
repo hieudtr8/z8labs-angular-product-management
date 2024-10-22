@@ -48,7 +48,7 @@ export class CategoryFormComponent {
 
   // Redirect to category list
   onBack(): void {
-    this.router.navigate(['/categories']);
+    this.router.navigate(['admin', 'categories']);
   }
 
   // Load category detail for editing
@@ -56,7 +56,7 @@ export class CategoryFormComponent {
     this.categoryService.getCategory(id)
       .subscribe(category => {
         if (!category) {
-          this.router.navigate(['/categories']);
+          this.router.navigate(['admin', 'categories']);
           return;
         }
 
@@ -76,12 +76,12 @@ export class CategoryFormComponent {
       category.id = this.categoryId;
       this.categoryService.updateCategory(category).subscribe(() => {
         this.toastr.success('Category updated successfully');
-        this.router.navigate(['/categories']);  // Redirect after updating
+        this.router.navigate(['admin', 'categories']);  // Redirect after updating
       });
     } else {
       this.categoryService.addCategory(category).subscribe(() => {
         this.toastr.success('Category added successfully');
-        this.router.navigate(['/categories']);  // Redirect after adding
+        this.router.navigate(['admin', 'categories']);  // Redirect after adding
       });
     }
   }

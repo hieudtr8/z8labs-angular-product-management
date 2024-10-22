@@ -47,12 +47,12 @@ export class CategoryListComponent implements OnInit {
 
   // Add a category
   onAdd(): void {
-    this.router.navigate(['categories', 'new']);
+    this.router.navigate(['admin', 'categories', 'new']);
   }
 
   // Edit a category
   onEdit(category: Category): void {
-    this.router.navigate(['categories', 'edit', category.id]);
+    this.router.navigate(['admin', 'categories', 'edit', category.id]);
   }
 
   // Delete a category

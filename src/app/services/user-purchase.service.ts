@@ -30,10 +30,6 @@ export class UserPurchaseService {
 
     const currentUserId = currentUser.id;
 
-    if (this.userPurchasesSubject.value.length > 0) {
-      return of(this.userPurchasesSubject.value);
-    }
-
     return collectionData(userPurchasesCollection, { idField: 'id'}).pipe(
       // Use map to filter the array of user purchases
       map((userPurchases: UserPurchase[]) => {

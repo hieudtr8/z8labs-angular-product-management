@@ -67,7 +67,7 @@ export class ProductFormComponent implements OnInit {
     });
   }
   onBack(): void {
-    this.router.navigate(['/products']);
+    this.router.navigate(['admin', 'products']);
   }
 
   loadListCategories(): void {
@@ -82,7 +82,7 @@ export class ProductFormComponent implements OnInit {
     this.productService.getProduct(id)
       .subscribe(product => {
         if (!product) {
-          this.router.navigate(['/products']);
+          this.router.navigate(['admin', 'products']);
           return;
         }
 
@@ -147,7 +147,7 @@ export class ProductFormComponent implements OnInit {
       this.productService.updateProduct(product, this.imageFile)
         .subscribe(() => {
           this.toastr.success('Product updated successfully');
-          this.router.navigate(['/products'])
+          this.router.navigate(['admin', 'products'])
         });
       return;
     }
@@ -156,7 +156,7 @@ export class ProductFormComponent implements OnInit {
     this.productService.addProduct(product, this.imageFile)
       .subscribe(() => {
         this.toastr.success('Product added successfully');
-        this.router.navigate(['/products'])
+        this.router.navigate(['admin', 'products'])
     });
   }
 }
