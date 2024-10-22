@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ProductService } from "../../../../services/product.service";
 import { filter, Observable, tap } from 'rxjs';
 import { Product } from "../../../../interfaces/product";
@@ -9,6 +9,7 @@ import { ToastrService } from "ngx-toastr";
 import { TableComponent } from "../../../../components/table/table.component";
 import { ProductCategoryService } from "../../../../services/product-category.service";
 import { ButtonDirective, ModalModule } from "@coreui/angular";
+import { CurrencyPipe } from "../../../../shared/pipe/currency-format.pipe";
 
 @Component({
   selector: 'app-product-list',
@@ -27,13 +28,14 @@ export class ProductListComponent implements OnInit {
   products$!: Observable<Product[]>;
   productToDelete: Product | null = null;
   isVisibleModalDelete: boolean = false;
+  currencyPipe = inject(CurrencyPipe);
 
   columns: TableColumn<Product>[] = [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'price', label: 'Price', pipe: 'currency' },
+    { key: 'price', label: 'Price', pipe: (value: number) => this.currencyPipe.transform(value) },
     { key: 'categoryName', label: 'Category Name' },
-    { key: 'imageUrl', label: 'Product Image', pipe: 'image' },
+    { key: 'imageUrl', label: 'Product Image', type: 'image' },
   ];
 
   constructor(

@@ -12,9 +12,11 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from "../environments/environment";
 import { getFirestore, provideFirestore } from "@angular/fire/firestore";
+import sharedPipes from "./shared/pipe";
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    ...sharedPipes,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withFetch()),

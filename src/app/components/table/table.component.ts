@@ -1,22 +1,18 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableColumn } from "../../interfaces/table";
-import { CurrencyPipe } from "../../shared/pipe/currency-format.pipe";
-import { ButtonDirective, TableActiveDirective, TableColorDirective, TableDirective, TableModule, TooltipDirective } from "@coreui/angular";
+import { ButtonDirective, TableModule, TooltipDirective } from "@coreui/angular";
 import { IconDirective } from "@coreui/icons-angular";
-import { DateFormatPipe } from "../../shared/pipe/date-format.pipe";
 
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [
     CommonModule,
-    CurrencyPipe,
     TableModule,
     ButtonDirective,
     IconDirective,
     TooltipDirective,
-    DateFormatPipe
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']

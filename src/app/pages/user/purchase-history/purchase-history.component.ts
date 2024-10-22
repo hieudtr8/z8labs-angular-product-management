@@ -6,6 +6,8 @@ import { filter, Observable, tap } from "rxjs";
 import { TableColumn } from "../../../interfaces/table";
 import { UserPurchaseService } from "../../../services/user-purchase.service";
 import { NavigationEnd, Router } from "@angular/router";
+import { DateFormatPipe } from "../../../shared/pipe/date-format.pipe";
+import { CurrencyPipe } from "../../../shared/pipe/currency-format.pipe";
 
 @Component({
   selector: 'app-purchase-history',
@@ -21,12 +23,14 @@ export class PurchaseHistoryComponent {
   userPurchases$!: Observable<UserPurchase[]>;
   userPurchaseService = inject(UserPurchaseService);
   router = inject(Router);
+  dateFormatPipe = inject(DateFormatPipe);
+  currencyPipe = inject(CurrencyPipe);
 
   columns: TableColumn<UserPurchase>[] = [
-    { key: 'createdAt', label: 'Date Purchased', pipe: 'date' },
+    { key: 'createdAt', label: 'Date Purchased', pipe: (value: Date) => this.dateFormatPipe.transform(value) },
     { key: 'productName' , label: 'Product' },
     { key: 'quantity', label: 'Quantity' },
-    { key: 'total', label: 'Total', pipe: 'currency' },
+    { key: 'total', label: 'Total', pipe: (value: number) => this.currencyPipe.transform(value) }
   ]
 
   constructor() { }

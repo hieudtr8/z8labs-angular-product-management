@@ -37,27 +37,20 @@
       <tr *ngFor="let row of data">
         <td *ngFor="let col of columns">
           <!-- Without Pipe -->
-          <ng-container *ngIf="!col.pipe">{{ row[col.key] }}</ng-container>
+          <ng-container *ngIf="!col.pipe && !col.type">{{ row[col.key] }}</ng-container>
 
-          <!-- Case data format currency -->
-          <ng-container *ngIf="col.pipe === 'currency'">
-            {{ row[col.key] | appCurrency }}
+          <!-- With Pipe -->
+          <ng-container *ngIf="col.pipe">
+            {{ col.pipe(row[col.key]) }}
           </ng-container>
 
-          <!-- Case data image -->
-          <ng-container *ngIf="col.pipe === 'image'">
+          <!-- Case have type image -->
+          <ng-container *ngIf="col.type === 'image'">
             <img
-              *ngIf="row[col.key]"
               [src]="row[col.key]"
-              alt="Image"
-              width="36"
-              height="36"
+              alt="Product Image"
+              class="img-fluid"
             />
-          </ng-container>
-
-          <!-- Case data date  -->
-           <ng-container *ngIf="col.pipe === 'date'">
-            {{ row[col.key] | appDateFormat }}
           </ng-container>
         </td>
         <!-- Row actions -->
