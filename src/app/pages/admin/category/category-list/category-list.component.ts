@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { sharedImports } from "../../../../shared/imports/shared-imports";
 import { Category } from "../../../../interfaces/category";
 import { CategoryService } from "../../../../services/category.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { TableColumn } from "../../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -22,6 +22,7 @@ import { TableComponent } from "../../../../components/table/table.component";
   styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit {
+  subscriptions: Subscription[] = [];
   categories$!: Observable<Category[]>;  // Observable for categories state
   categoryToDelete: Category | null = null;
   isVisibleModalDelete: boolean = false;
@@ -40,7 +41,8 @@ export class CategoryListComponent implements OnInit {
   ngOnInit(): void {
     this.categories$ = this.categoryService.categories$;
 
-    this.categoryService.fetchCategories().subscribe();
+    const subscribeFetchCate = this.categoryService.fetchCategories().subscribe();
+    this.subscriptions.push(subscribeFetchCate);
   }
 
   // Add a category
@@ -64,7 +66,8 @@ export class CategoryListComponent implements OnInit {
   confirmDelete(): void {
     if (!this.categoryToDelete || !this.categoryToDelete.id) return;
 
-    this.categoryService.deleteCategory(this.categoryToDelete.id).subscribe();
+    const subscribeDeleteCate = this.categoryService.deleteCategory(this.categoryToDelete.id).subscribe();
+    this.subscriptions.push(subscribeDeleteCate);
     this.toastr.success('Category deleted successfully');
 
     this.categoryToDelete = null;
@@ -78,5 +81,9 @@ export class CategoryListComponent implements OnInit {
 
   handleVisibleChange(isVisible: boolean): void {
     this.isVisibleModalDelete = isVisible;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

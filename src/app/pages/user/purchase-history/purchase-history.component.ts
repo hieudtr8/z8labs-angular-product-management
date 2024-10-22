@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { sharedImports } from "../../../shared/imports/shared-imports";
 import { TableComponent } from "../../../components/table/table.component";
 import { UserPurchase } from "../../../interfaces/user-purchase";
-import { filter, Observable, tap } from "rxjs";
+import { filter, Observable, Subscription, tap } from "rxjs";
 import { TableColumn } from "../../../interfaces/table";
 import { UserPurchaseService } from "../../../services/user-purchase.service";
 import { NavigationEnd, Router } from "@angular/router";
@@ -20,8 +20,9 @@ import { CurrencyPipe } from "../../../shared/pipe/currency-format.pipe";
   styleUrl: './purchase-history.component.scss'
 })
 export class PurchaseHistoryComponent {
-  userPurchases$!: Observable<UserPurchase[]>;
+  subscriptions: Subscription[] = [];
   userPurchaseService = inject(UserPurchaseService);
+  userPurchases$: Observable<UserPurchase[]> = this.userPurchaseService.userPurchases$;
   router = inject(Router);
   dateFormatPipe = inject(DateFormatPipe);
   currencyPipe = inject(CurrencyPipe);
@@ -36,9 +37,26 @@ export class PurchaseHistoryComponent {
   constructor() { }
 
   ngOnInit(): void {
-    this.userPurchases$ = this.userPurchaseService.userPurchases$;
-    this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
+    const subscriptionRoute = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      tap(() => {
+        // Refetch products with categories when navigating back
+         const subscriptionFetchUserPurchase = this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
+          (updatedProducts) => this.userPurchaseService.updateUserPurchases(updatedProducts).subscribe()
+        );
+        this.subscriptions.push(subscriptionFetchUserPurchase);
+      })
+    ).subscribe();
+
+    this.subscriptions.push(subscriptionRoute);
+
+    const subscriptionFetchList = this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
       (userPurchases) => this.userPurchaseService.updateUserPurchases(userPurchases).subscribe()
     );
+    this.subscriptions.push(subscriptionFetchList);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

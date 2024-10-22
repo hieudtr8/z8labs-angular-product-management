@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { collection, collectionData, doc, Firestore, setDoc, Timestamp } from "@angular/fire/firestore";
 import { UserPurchase } from "../interfaces/user-purchase";
-import { BehaviorSubject, catchError, combineLatest, filter, from, map, Observable, of, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, combineLatest, filter, from, map, Observable, of, Subscription, tap, throwError } from "rxjs";
 import { AuthService } from "./auth.service";
 import { ProductService } from "./product.service";
 
@@ -16,16 +16,18 @@ export class UserPurchaseService {
   private userPurchasesSubject = new BehaviorSubject<UserPurchase[]>([]);
   public userPurchases$ = this.userPurchasesSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.authService.isLoggedIn$.subscribe(() => this.userPurchasesSubject.next([]));
+  }
 
   // Fetch list of user purchases of current user
   fetchUserPurchases(): Observable<UserPurchase[]> {
-    if (this.userPurchasesSubject.value.length > 0) {
-      return of(this.userPurchasesSubject.value);
-    }
-
     const userPurchasesCollection = collection(this.firestore, 'user-purchases');
-    const currentUserId = this.authService.currentUserSig()?.id;
+    const currentUser = this.authService.currentUserSig();
+
+    if (!currentUser) return throwError(() => new Error('User not signed in'));
+
+    const currentUserId = currentUser.id;
 
     return collectionData(userPurchasesCollection, { idField: 'id'}).pipe(
       // Use map to filter the array of user purchases

@@ -59,7 +59,10 @@ export class AuthService {
   }
 
   logout (): Observable<void> {
-    const promise = signOut(this.firebaseAuth);
+    const promise = signOut(this.firebaseAuth).then(() => {
+      this.currentUserSig.set(undefined);
+      localStorage.removeItem(this.authKey);
+    });
 
     return from(promise);
   }

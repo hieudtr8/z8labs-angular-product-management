@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductService } from "../../../../services/product.service";
-import { filter, Observable, tap } from 'rxjs';
+import { filter, Observable, Subscription, tap } from 'rxjs';
 import { Product } from "../../../../interfaces/product";
 import { sharedImports } from "../../../../shared/imports/shared-imports";
 import { TableColumn } from "../../../../interfaces/table";
@@ -25,6 +25,7 @@ import { CurrencyPipe } from "../../../../shared/pipe/currency-format.pipe";
 })
 
 export class ProductListComponent implements OnInit {
+  subscriptions: Subscription[] = [];
   products$!: Observable<Product[]>;
   productToDelete: Product | null = null;
   isVisibleModalDelete: boolean = false;
@@ -47,24 +48,29 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.products$ = this.productService.products$;
-    this.router.events.pipe(
+    const subscriptionRoute = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       tap(() => {
         // Refetch products with categories when navigating back
-        this.productCategoryService.fetchProductsWithCategories().subscribe(
+         const subscriptionFetchProdCate1 = this.productCategoryService.fetchProductsWithCategories().subscribe(
           (updatedProducts) => this.productService.updateProducts(updatedProducts).subscribe()
         );
+        this.subscriptions.push(subscriptionFetchProdCate1);
       })
     ).subscribe();
+    this.subscriptions.push(subscriptionRoute);
 
     // Initial load
-    this.productCategoryService.fetchProductsWithCategories().subscribe(
+    const subscriptionFetchProductsInitial = this.productCategoryService.fetchProductsWithCategories().subscribe(
       (updatedProducts) => this.productService.updateProducts(updatedProducts).subscribe()
     );
+
+    this.subscriptions.push(subscriptionFetchProductsInitial);
   }
 
   deleteProduct(id: string): void {
-    this.productService.deleteProduct(id).subscribe();
+    const subscriptionDelete = this.productService.deleteProduct(id).subscribe();
+    this.subscriptions.push(subscriptionDelete);
   }
 
   onAdd(): void {
@@ -99,5 +105,9 @@ export class ProductListComponent implements OnInit {
 
   handleVisibleChange(isVisible: boolean): void {
     this.isVisibleModalDelete = isVisible;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
