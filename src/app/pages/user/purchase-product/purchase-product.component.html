@@ -3,8 +3,10 @@
     <c-col xs="12" sm="6" md="4">
       <c-card class="mb-4 mx-3">
         <!-- Header -->
-        <c-card-header>
-          <strong>{{ product.name }}</strong>
+        <c-card-header class="text-center">
+          <h4>
+            {{ product.name }}
+          </h4>
         </c-card-header>
         <img
           [src]="product.imageUrl"
@@ -18,13 +20,13 @@
           <p class="mt-3">{{ product.description }}</p>
           <p class="fw-semibold">{{ product.price | appCurrency }}</p>
 
-          <div class="d-flex justify-content-center pt-4">
+          <div class="d-flex justify-content-center pt-0">
             <button
               cButton
               color="primary"
               (click)="onPurchase(product)"
             >
-              Purchase Now
+              Purchase
             </button>
           </div>
         </c-card-body>
@@ -62,6 +64,7 @@
           formControlName="quantity"
           type="number"
           class="form-control"
+          min="1"
           (change)="productPurchaseForm.patchValue({ total: productToPurchase.price * productPurchaseForm.get('quantity')?.value })"
         />
         <div
@@ -99,7 +102,7 @@
           type="submit"
           [disabled]="productPurchaseForm.invalid"
         >
-          Purchase
+          Confirm
         </button>
         <button cButton color="secondary" (click)="cancelPurchase()">
           Cancel

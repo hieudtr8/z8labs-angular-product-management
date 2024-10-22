@@ -47,24 +47,6 @@ export class UserPurchaseService {
     );
   }
 
-  // Fetch list of user purchases with product details
-  fetchUserPurchasesWithProducts(): Observable<UserPurchase[]> {
-    return combineLatest([
-      this.fetchUserPurchases(),
-      this.productsService.fetchProducts()
-    ]).pipe(
-      map(([userPurchases, products]) => {
-        return userPurchases.map(userPurchase => {
-          const product = products.find(product => product.id === userPurchase.productId);
-          return {
-            ...userPurchase,
-            productName: product?.name || 'Unknown',
-          };
-        }
-      )})
-    );
-  }
-
   // User purchase new product
   purchaseProduct(userPurchase: UserPurchase): Observable<UserPurchase> {
     const userPurchaseId = doc(collection(this.firestore, 'user-purchases')).id;

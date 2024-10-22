@@ -41,18 +41,14 @@ export class PurchaseHistoryComponent {
       filter(event => event instanceof NavigationEnd),
       tap(() => {
         // Refetch products with categories when navigating back
-         const subscriptionFetchUserPurchase = this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
-          (updatedProducts) => this.userPurchaseService.updateUserPurchases(updatedProducts).subscribe()
-        );
+        const subscriptionFetchUserPurchase = this.userPurchaseService.fetchUserPurchases().subscribe();
         this.subscriptions.push(subscriptionFetchUserPurchase);
       })
     ).subscribe();
 
     this.subscriptions.push(subscriptionRoute);
 
-    const subscriptionFetchList = this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
-      (userPurchases) => this.userPurchaseService.updateUserPurchases(userPurchases).subscribe()
-    );
+    const subscriptionFetchList = this.userPurchaseService.fetchUserPurchases().subscribe();
     this.subscriptions.push(subscriptionFetchList);
   }
 
