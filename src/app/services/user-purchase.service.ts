@@ -17,6 +17,7 @@ export class UserPurchaseService {
   public userPurchases$ = this.userPurchasesSubject.asObservable();
 
   constructor() {
+    // Clear user purchases state when user logs out
     this.authService.isLoggedIn$.subscribe(() => this.userPurchasesSubject.next([]));
   }
 
@@ -28,6 +29,10 @@ export class UserPurchaseService {
     if (!currentUser) return throwError(() => new Error('User not signed in'));
 
     const currentUserId = currentUser.id;
+
+    if (this.userPurchasesSubject.value.length > 0) {
+      return of(this.userPurchasesSubject.value);
+    }
 
     return collectionData(userPurchasesCollection, { idField: 'id'}).pipe(
       // Use map to filter the array of user purchases
@@ -43,7 +48,6 @@ export class UserPurchaseService {
       }),
       tap((userPurchases: UserPurchase[]) => this.userPurchasesSubject.next(userPurchases)),
       catchError(error =>  throwError(() => new Error(error)))
-
     );
   }
 
