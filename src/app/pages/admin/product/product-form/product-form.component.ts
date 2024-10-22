@@ -11,6 +11,7 @@ import { ToastrService } from "ngx-toastr";
 import { IconDirective } from "@coreui/icons-angular";
 import { TooltipDirective } from "@coreui/angular";
 import { NgOptimizedImage } from "@angular/common";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-product-form',
@@ -26,6 +27,7 @@ import { NgOptimizedImage } from "@angular/common";
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit {
+  subscriptions: Subscription[] = [];
   productForm!: FormGroup;
   isEditMode: boolean = false;
   productId?: string;
@@ -71,7 +73,8 @@ export class ProductFormComponent implements OnInit {
   loadListCategories(): void {
     this.categories$ = this.categoryService.categories$;
 
-    this.categoryService.fetchCategories().subscribe();
+    const subscription = this.categoryService.fetchCategories().subscribe();
+    this.subscriptions.push(subscription);
   }
 
   // Load product details for editing

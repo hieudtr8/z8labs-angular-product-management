@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Product } from "../../../interfaces/product";
-import { filter, Observable, tap } from "rxjs";
+import { filter, Observable, Subscription, tap } from "rxjs";
 import { ProductService } from "../../../services/product.service";
 import { NavigationEnd, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -26,6 +26,7 @@ import { UserPurchaseService } from "../../../services/user-purchase.service";
   styleUrl: './purchase-product.component.scss'
 })
 export class PurchaseProductComponent {
+  private subscriptions: Subscription[] = [];
   public router = inject(Router);
   public toastr = inject(ToastrService);
 
@@ -42,20 +43,24 @@ export class PurchaseProductComponent {
 
   ngOnInit(): void {
     this.products$ = this.productService.products$;
-    this.router.events.pipe(
+    const subscriptionFetchProduct = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       tap(() => {
         // Refetch products with categories when navigating back
-        this.productCategoryService.fetchProductsWithCategories().subscribe(
+        const subscriptionOnNav = this.productCategoryService.fetchProductsWithCategories().subscribe(
           (updatedProducts) => this.productService.updateProducts(updatedProducts).subscribe()
         );
+
+        this.subscriptions.push(subscriptionOnNav);
       })
     ).subscribe();
+    this.subscriptions.push(subscriptionFetchProduct);
 
     // Initial load
-    this.productCategoryService.fetchProductsWithCategories().subscribe(
+    const subscriptionInital = this.productCategoryService.fetchProductsWithCategories().subscribe(
       (updatedProducts) => this.productService.updateProducts(updatedProducts).subscribe()
     );
+    this.subscriptions.push(subscriptionInital);
   }
 
   onPurchase(product: Product): void {
@@ -93,5 +98,9 @@ export class PurchaseProductComponent {
       this.isVisibleModalPurchase = false;
       this.productPurchaseForm.reset();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

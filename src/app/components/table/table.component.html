@@ -2,6 +2,7 @@
   <!-- Widget button add new -->
   <div class="table-widget">
     <button
+      *ngIf="!noAction"
       (click)="onAdd()"
       cButton
       size="sm"
