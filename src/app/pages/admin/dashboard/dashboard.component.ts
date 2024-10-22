@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from "../../interfaces/product";
-import { Category } from "../../interfaces/category";
-import { ProductService } from "../../services/product.service";
-import { CategoryService } from "../../services/category.service";
-import { sharedImports } from "../../shared/imports/shared-imports";
+import { Product } from "../../../interfaces/product";
+import { Category } from "../../../interfaces/category";
+import { ProductService } from "../../../services/product.service";
+import { CategoryService } from "../../../services/category.service";
+import { sharedImports } from "../../../shared/imports/shared-imports";
 import { combineLatest, map, Observable } from "rxjs";
-import { PieChartComponent } from "../../components/pie-chart/pie-chart.component";
+import { PieChartComponent } from "../../../components/pie-chart/pie-chart.component";
 
 @Component({
   selector: 'app-dashboard',

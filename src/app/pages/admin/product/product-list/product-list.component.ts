@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from "../../../services/product.service";
+import { ProductService } from "../../../../services/product.service";
 import { filter, Observable, tap } from 'rxjs';
-import { Product } from "../../../interfaces/product";
-import { sharedImports } from "../../../shared/imports/shared-imports";
-import { TableColumn } from "../../../interfaces/table";
+import { Product } from "../../../../interfaces/product";
+import { sharedImports } from "../../../../shared/imports/shared-imports";
+import { TableColumn } from "../../../../interfaces/table";
 import { NavigationEnd, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { TableComponent } from "../../../components/table/table.component";
-import { ProductCategoryService } from "../../../services/product-category.service";
+import { TableComponent } from "../../../../components/table/table.component";
+import { ProductCategoryService } from "../../../../services/product-category.service";
 import { ButtonDirective, ModalModule } from "@coreui/angular";
 
 @Component({

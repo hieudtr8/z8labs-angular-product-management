@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { sharedImports } from "../../../shared/imports/shared-imports";
-import { Category } from "../../../interfaces/category";
-import { CategoryService } from "../../../services/category.service";
+import { sharedImports } from "../../../../shared/imports/shared-imports";
+import { Category } from "../../../../interfaces/category";
+import { CategoryService } from "../../../../services/category.service";
 import { Observable } from "rxjs";
-import { TableColumn } from "../../../interfaces/table";
+import { TableColumn } from "../../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, ModalModule, RowComponent, TextColorDirective } from "@coreui/angular";
-import { TableComponent } from "../../../components/table/table.component";
+import { TableComponent } from "../../../../components/table/table.component";
 
 @Component({
   selector: 'app-category-list',

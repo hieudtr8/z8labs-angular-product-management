@@ -2,17 +2,17 @@ import { Routes } from '@angular/router';
 import { authGuard } from "./guard/auth.guard";
 import { loggedInGuard } from "./guard/logged-in.guard";
 import { LoginComponent } from "./pages/login/login.component";
-import { DashboardComponent } from "./pages/dashboard/dashboard.component";
-import { ProductListComponent } from "./pages/product/product-list/product-list.component";
-import { ProductFormComponent } from "./pages/product/product-form/product-form.component";
-import { CategoryListComponent } from "./pages/category/category-list/category-list.component";
-import { CategoryFormComponent } from "./pages/category/category-form/category-form.component";
+import { DashboardComponent } from "./pages/admin/dashboard/dashboard.component";
+import { ProductListComponent } from "./pages/admin/product/product-list/product-list.component";
+import { ProductFormComponent } from "./pages/admin/product/product-form/product-form.component";
+import { CategoryListComponent } from "./pages/admin/category/category-list/category-list.component";
+import { CategoryFormComponent } from "./pages/admin/category/category-form/category-form.component";
 import { RegisterComponent } from "./pages/register/register.component";
 import { AdminLayoutComponent } from "./layout/admin-layout/admin-layout.component";
 import { UserLayoutComponent } from "./layout/user-layout/user-layout.component";
 import { authAdminGuard } from "./guard/auth-admin.guard";
-import { PurchaseProductComponent } from "./pages/purchase-product/purchase-product.component";
-import { PurchaseHistoryComponent } from "./pages/purchase-history/purchase-history.component";
+import { PurchaseProductComponent } from "./pages/user/purchase-product/purchase-product.component";
+import { PurchaseHistoryComponent } from "./pages/user/purchase-history/purchase-history.component";
 
 export const routes: Routes = [
   // Login route
