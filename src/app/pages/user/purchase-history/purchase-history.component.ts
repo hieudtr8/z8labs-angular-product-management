@@ -1,12 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { sharedImports } from "../../../shared/imports/shared-imports";
+import { TableComponent } from "../../../components/table/table.component";
+import { UserPurchase } from "../../../interfaces/user-purchase";
+import { filter, Observable, tap } from "rxjs";
+import { TableColumn } from "../../../interfaces/table";
+import { UserPurchaseService } from "../../../services/user-purchase.service";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Component({
   selector: 'app-purchase-history',
   standalone: true,
-  imports: [],
+  imports: [
+    ...sharedImports,
+    TableComponent,
+  ],
   templateUrl: './purchase-history.component.html',
   styleUrl: './purchase-history.component.scss'
 })
 export class PurchaseHistoryComponent {
+  userPurchases$!: Observable<UserPurchase[]>;
+  userPurchaseService = inject(UserPurchaseService);
+  router = inject(Router);
 
+  columns: TableColumn<UserPurchase>[] = [
+    { key: 'createdAt', label: 'Date Purchased', pipe: 'date' },
+    { key: 'productName' , label: 'Product' },
+    { key: 'quantity', label: 'Quantity' },
+    { key: 'total', label: 'Total', pipe: 'currency' },
+  ]
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.userPurchases$ = this.userPurchaseService.userPurchases$;
+    this.userPurchaseService.fetchUserPurchasesWithProducts().subscribe(
+      (userPurchases) => this.userPurchaseService.updateUserPurchases(userPurchases).subscribe()
+    );
+  }
 }

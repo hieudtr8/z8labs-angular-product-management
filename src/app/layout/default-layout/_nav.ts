@@ -30,12 +30,12 @@ export const navUserItems: INavData[] = [
     name: 'Purchase'
   },
   {
-    name: 'Purchase Product',
+    name: 'Product',
     url: 'purchase-product',
     iconComponent: { name: 'cil-cart' },
   },
   {
-    name: 'Purchase History',
+    name: 'History',
     url: 'purchase-history',
     iconComponent: { name: 'cil-basket' }
   }

@@ -29,17 +29,22 @@
     <thead>
       <tr>
         <th *ngFor="let col of columns">{{ col.label }}</th>
-        <th>Actions</th>
+        <th *ngIf="!noAction" >Actions</th>
       </tr>
     </thead>
     <!-- Body row data -->
     <tbody>
       <tr *ngFor="let row of data">
         <td *ngFor="let col of columns">
+          <!-- Without Pipe -->
           <ng-container *ngIf="!col.pipe">{{ row[col.key] }}</ng-container>
+
+          <!-- Case data format currency -->
           <ng-container *ngIf="col.pipe === 'currency'">
             {{ row[col.key] | appCurrency }}
           </ng-container>
+
+          <!-- Case data image -->
           <ng-container *ngIf="col.pipe === 'image'">
             <img
               *ngIf="row[col.key]"
@@ -49,9 +54,14 @@
               height="36"
             />
           </ng-container>
+
+          <!-- Case data date  -->
+           <ng-container *ngIf="col.pipe === 'date'">
+            {{ row[col.key] | appDateFormat }}
+          </ng-container>
         </td>
         <!-- Row actions -->
-        <td class="d-flex gap-2">
+        <td class="d-flex gap-2" *ngIf="!noAction">
           <button
             (click)="onEdit(row)"
             cButton

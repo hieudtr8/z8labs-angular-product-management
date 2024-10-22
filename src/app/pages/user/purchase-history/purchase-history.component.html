@@ -1,1 +1,16 @@
-<p>purchase-history works!</p>
+<c-row ngPreserveWhitespaces>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Product List</strong>
+      </c-card-header>
+      <c-card-body>
+        <app-table
+          [data]="(userPurchases$ | async) ?? []"
+          [columns]="columns"
+          [noAction]="true"
+        />
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

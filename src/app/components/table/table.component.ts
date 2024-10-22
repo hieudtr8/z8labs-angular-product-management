@@ -4,6 +4,7 @@ import { TableColumn } from "../../interfaces/table";
 import { CurrencyPipe } from "../../shared/pipe/currency-format.pipe";
 import { ButtonDirective, TableActiveDirective, TableColorDirective, TableDirective, TableModule, TooltipDirective } from "@coreui/angular";
 import { IconDirective } from "@coreui/icons-angular";
+import { DateFormatPipe } from "../../shared/pipe/date-format.pipe";
 
 @Component({
   selector: 'app-table',
@@ -14,7 +15,8 @@ import { IconDirective } from "@coreui/icons-angular";
     TableModule,
     ButtonDirective,
     IconDirective,
-    TooltipDirective
+    TooltipDirective,
+    DateFormatPipe
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
@@ -22,6 +24,7 @@ import { IconDirective } from "@coreui/icons-angular";
 export class TableComponent<T> {
   @Input() columns: TableColumn<T>[] = [];
   @Input() data: T[] = [];
+  @Input() noAction: boolean = false;
 
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<T>();

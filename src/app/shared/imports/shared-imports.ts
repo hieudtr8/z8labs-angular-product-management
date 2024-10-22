@@ -1,15 +1,15 @@
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormControlDirective, FormDirective, FormLabelDirective, FormSelectDirective, FormTextDirective, RowComponent, TextColorDirective } from "@coreui/angular";
+import { ButtonDirective, CardBodyComponent, CardComponent, CardFooterComponent, CardHeaderComponent, CardModule, ColComponent, FormControlDirective, FormDirective, FormLabelDirective, FormModule, FormSelectDirective, FormTextDirective, RowComponent, TextColorDirective } from "@coreui/angular";
+import { IconDirective } from "@coreui/icons-angular";
 
 export const sharedImports = [
   CommonModule,
   RowComponent,
   ColComponent,
   TextColorDirective,
-  CardComponent,
-  CardHeaderComponent,
-  CardBodyComponent,
+  CardModule,
+  IconDirective
 ]
 
 export const formImports = [
@@ -18,9 +18,5 @@ export const formImports = [
   ColComponent,
   ButtonDirective,
   ReactiveFormsModule,
-  FormDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  FormTextDirective,
-  FormSelectDirective
+  FormModule,
 ]

@@ -15,7 +15,7 @@ import { PurchaseProductComponent } from "./pages/user/purchase-product/purchase
 import { PurchaseHistoryComponent } from "./pages/user/purchase-history/purchase-history.component";
 
 export const routes: Routes = [
-  // Login route
+  // Authentication route
   {
     path: '',
     redirectTo: '/login',
@@ -67,5 +67,5 @@ export const routes: Routes = [
   },
 
   // Wildcard route for any unmatched routes
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: '/user/purchhase-product' }
 ];

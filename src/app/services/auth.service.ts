@@ -22,6 +22,7 @@ export class AuthService {
     this.user$.subscribe((user: User | null) => {
       if (user) {
         this.currentUserSig.set({
+          id: user.uid,
           email: user.email!,
           username: user.displayName!,
           role: {

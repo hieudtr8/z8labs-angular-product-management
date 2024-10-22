@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
     this.authService.user$.subscribe((user: any) => {
       if (user) {
         this.authService.currentUserSig.set({
+          id: user.uid,
           email: user.email!,
           username: user.displayName!,
           role: {
