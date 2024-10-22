@@ -48,7 +48,7 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/user/purchase-product']);
       },
       error: (error) => {
         this.errorMessage = error.message;

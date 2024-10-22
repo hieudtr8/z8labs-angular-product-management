@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableColumn } from "../../interfaces/table";
 import { CurrencyPipe } from "../../shared/pipe/currency-format.pipe";
-import { ButtonDirective, TableActiveDirective, TableColorDirective, TableDirective, TooltipDirective } from "@coreui/angular";
+import { ButtonDirective, TableActiveDirective, TableColorDirective, TableDirective, TableModule, TooltipDirective } from "@coreui/angular";
 import { IconDirective } from "@coreui/icons-angular";
 
 @Component({
@@ -11,9 +11,7 @@ import { IconDirective } from "@coreui/icons-angular";
   imports: [
     CommonModule,
     CurrencyPipe,
-    TableDirective,
-    TableColorDirective,
-    TableActiveDirective,
+    TableModule,
     ButtonDirective,
     IconDirective,
     TooltipDirective

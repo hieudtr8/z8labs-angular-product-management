@@ -42,6 +42,23 @@
           Account
         </h6>
       </li>
+      <!-- Navigate between admin and user layout only for admin -->
+      @if (currentUser?.role?.admin) {
+        <!-- To user purchase product -->
+        <li *ngIf="currentlyInLayout('admin')">
+          <a cDropdownItem routerLink="/user/purchase-product">
+            <svg cIcon class="me-2" name="cilCart"></svg>
+            User Purchase
+          </a>
+        </li>
+        <!-- To admin dashboard -->
+        <li *ngIf="currentlyInLayout('user')">
+          <a cDropdownItem routerLink="/admin/dashboard">
+            <svg cIcon class="me-2" name="cilSpeedometer"></svg>
+            Admin Dashboard
+          </a>
+        </li>
+      }
       <li>
         <a class="logout-btn" cDropdownItem (click)="logout()">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>

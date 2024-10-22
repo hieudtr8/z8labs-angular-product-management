@@ -11,10 +11,11 @@ export const loggedInGuard: CanActivateFn = (route, state) => {
     take(1),
     map(isLoggedIn => {
       if (isLoggedIn) {
-        router.navigate(['/dashboard']);
+        router.navigate(['/user/purchase-product']);
         return false;
-      } else {}
-        return true;
+      }
+
+      return true;
     })
   );
 };

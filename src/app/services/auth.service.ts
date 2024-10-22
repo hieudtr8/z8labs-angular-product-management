@@ -23,7 +23,11 @@ export class AuthService {
       if (user) {
         this.currentUserSig.set({
           email: user.email!,
-          username: user.displayName!
+          username: user.displayName!,
+          role: {
+            user: true,
+            admin: user.email === 'admin@gmail.com'
+          }
         });
       } else {
         this.currentUserSig.set(undefined);
@@ -57,5 +61,10 @@ export class AuthService {
     const promise = signOut(this.firebaseAuth);
 
     return from(promise);
+  }
+
+  isAdmin(): boolean {
+    const currentUser = this.currentUserSig();
+    return currentUser?.role.admin || false;
   }
 }

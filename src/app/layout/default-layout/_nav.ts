@@ -1,9 +1,10 @@
 import { INavData } from '@coreui/angular';
 
-export const navItems: INavData[] = [
+// Navitems for the admin layout
+export const navAdminItems: INavData[] = [
   {
     name: 'Dashboard',
-    url: '/dashboard',
+    url: 'dashboard',
     iconComponent: { name: 'cil-speedometer' }
   },
   {
@@ -12,12 +13,30 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Product',
-    url: '/products',
+    url: 'products',
     iconComponent: { name: 'cil-cart' },
   },
   {
     name: 'Category',
-    url: '/categories',
+    url: 'categories',
     iconComponent: { name: 'cil-list' }
   }
 ];
+
+// Navitems for the user layout
+export const navUserItems: INavData[] = [
+  {
+    title: true,
+    name: 'Purchase'
+  },
+  {
+    name: 'Purchase Product',
+    url: 'purchase-product',
+    iconComponent: { name: 'cil-cart' },
+  },
+  {
+    name: 'Purchase History',
+    url: 'purchase-history',
+    iconComponent: { name: 'cil-basket' }
+  }
+]
