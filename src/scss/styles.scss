@@ -8,6 +8,10 @@
 // Custom styles for this theme
 @import "theme";
 
+// Import Angular Calendar styles
+@import "angular-calendar/css/angular-calendar";
+
+// Global styles
 body {
   margin: 0;
 }

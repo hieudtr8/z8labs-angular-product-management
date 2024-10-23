@@ -6,23 +6,45 @@ import { CategoryService } from "../../../services/category.service";
 import { sharedImports } from "../../../shared/imports/shared-imports";
 import { combineLatest, map, Observable, Subscription } from "rxjs";
 import { PieChartComponent } from "../../../components/pie-chart/pie-chart.component";
+import { CalendarEvent, CalendarModule } from "angular-calendar";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     ...sharedImports,
-    PieChartComponent
+    PieChartComponent,
+    CalendarModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
   subscriptions: Subscription[] = [];
-  products$!: Observable<Product[]>;  // Observable for product state
-  categories$!: Observable<Category[]>;  // Observable for categories state
-  chartData: number[] = [];  // Data for the pie chart
-  chartLabels: string[] = [];  // Labels for the pie chart
+  products$!: Observable<Product[]>;
+  categories$!: Observable<Category[]>;
+  chartData: number[] = [];
+  chartLabels: string[] = [];
+  viewDate: Date = new Date();
+  events: CalendarEvent[] = [
+    {
+      title: 'Draggable event',
+      color: {
+        primary: '#1e90ff',
+        secondary: '#D1E8FF'
+      },
+      start: new Date(),
+      draggable: true,
+    },
+    {
+      title: 'A non draggable event',
+      color: {
+        primary: '#ad2121',
+        secondary: '#FAE3E3'
+      },
+      start: new Date(),
+    },
+  ];
 
   constructor(
     private productService: ProductService,
@@ -38,10 +60,10 @@ export class DashboardComponent implements OnInit {
     const subscribeFetchCategories = this.categoryService.fetchCategories().subscribe();
     this.subscriptions.push(subscribeFetchCategories);
 
-    this.populateChartData();
+    this.populateChartProductByCategoriesData();
   }
 
-  populateChartData(): void {
+  populateChartProductByCategoriesData(): void {
     const subscribeCombine = combineLatest([this.categories$, this.products$])
       .pipe(
         map(([categories, products]) => {

@@ -22,10 +22,6 @@ export class PieChartComponent {
       legend: {
         position: 'top',
       },
-      title: {
-        display: true,
-        text: 'Products by Category'
-      }
     }
   };
 }
