@@ -89,6 +89,7 @@ export class PurchaseProductComponent {
       quantity: this.productPurchaseForm.get('quantity')?.value,
       total: this.productPurchaseForm.get('total')?.value,
       productName: this.productToPurchase?.name || 'Unknown',
+      userName: this.authService.currentUserSig()?.username || 'Unknown',
       createdAt: new Date()
     }
 

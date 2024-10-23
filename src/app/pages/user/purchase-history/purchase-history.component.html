@@ -6,7 +6,7 @@
       </c-card-header>
       <c-card-body>
         <app-table
-          [data]="(userPurchases$ | async) ?? []"
+          [data]="(userPurchasesCurrentUser$ | async) ?? []"
           [columns]="columns"
           [noAction]="true"
         />

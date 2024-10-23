@@ -8,4 +8,5 @@ export interface UserPurchase {
   total: number;
   createdAt: Date | Timestamp;
   productName: string;
+  userName: string;
 }

@@ -11,18 +11,21 @@ import { ProductService } from "./product.service";
 export class UserPurchaseService {
   private firestore: Firestore = inject(Firestore);
   private authService = inject(AuthService);
-  private productsService = inject(ProductService);
 
-  private userPurchasesSubject = new BehaviorSubject<UserPurchase[]>([]);
-  public userPurchases$ = this.userPurchasesSubject.asObservable();
+  // Store user purchases of current user
+  private userPurchasesCurrentUserSubject = new BehaviorSubject<UserPurchase[]>([]);
+  public userPurchasesCurrentUser$ = this.userPurchasesCurrentUserSubject.asObservable();
+  // Store all user purchases
+  private allUserPurchasesSubject = new BehaviorSubject<UserPurchase[]>([]);
+  public allUserPurchases$ = this.allUserPurchasesSubject.asObservable();
 
   constructor() {
     // Clear user purchases state when user logs out
-    this.authService.isLoggedIn$.subscribe(() => this.userPurchasesSubject.next([]));
+    this.authService.isLoggedIn$.subscribe(() => this.userPurchasesCurrentUserSubject.next([]));
   }
 
   // Fetch list of user purchases of current user
-  fetchUserPurchases(): Observable<UserPurchase[]> {
+  fetchUserPurchasesOfCurrentUser(): Observable<UserPurchase[]> {
     const userPurchasesCollection = collection(this.firestore, 'user-purchases');
     const currentUser = this.authService.currentUserSig();
 
@@ -42,7 +45,26 @@ export class UserPurchaseService {
         return afterFilter.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
 
       }),
-      tap((userPurchases: UserPurchase[]) => this.userPurchasesSubject.next(userPurchases)),
+      tap((userPurchases: UserPurchase[]) => this.userPurchasesCurrentUserSubject.next(userPurchases)),
+      catchError(error =>  throwError(() => new Error(error)))
+    );
+  }
+
+  // Fetch list of all user purchases
+  fetchAllUserPurchases(): Observable<UserPurchase[]> {
+    const userPurchasesCollection = collection(this.firestore, 'user-purchases');
+
+    return collectionData(userPurchasesCollection, { idField: 'id'}).pipe(
+      map((userPurchases: UserPurchase[]) => {
+        // convert createdAt from timestampt to a Date object
+        userPurchases.forEach(userPurchase => {
+          userPurchase.createdAt = (userPurchase.createdAt as Timestamp).toDate();
+        });
+        // sort by createdAt in descending order
+        userPurchases.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
+        return userPurchases;
+      }),
+      tap((userPurchases: UserPurchase[]) => this.allUserPurchasesSubject.next(userPurchases)),
       catchError(error =>  throwError(() => new Error(error)))
     );
   }
@@ -57,17 +79,24 @@ export class UserPurchaseService {
 
     return from(setDoc(doc(this.firestore, 'user-purchases', userPurchaseId), newUserPurchase)).pipe(
       tap(() => {
-        const currentPurchases = this.userPurchasesSubject.value;
-        this.userPurchasesSubject.next([...currentPurchases, newUserPurchase]);
+        const currentPurchases = this.userPurchasesCurrentUserSubject.value;
+        this.userPurchasesCurrentUserSubject.next([...currentPurchases, newUserPurchase]);
+        this.allUserPurchasesSubject.next([...this.allUserPurchasesSubject.value, newUserPurchase]);
       }),
       map(() => newUserPurchase),
       catchError(error => throwError(() => new Error(error)))
     );
   }
 
-  // Reupdate user purchases state
-  updateUserPurchases(userPurchases: UserPurchase[]): Observable<UserPurchase[]> {
-    this.userPurchasesSubject.next(userPurchases);
+  // Reupdate current user's user purchases state
+  updateCurrentUserUserPurchases(userPurchases: UserPurchase[]): Observable<UserPurchase[]> {
+    this.userPurchasesCurrentUserSubject.next(userPurchases);
+    return of(userPurchases);
+  }
+
+  // Reupdate all user purchases state
+  updateAllUserPurchases(userPurchases: UserPurchase[]): Observable<UserPurchase[]> {
+    this.allUserPurchasesSubject.next(userPurchases);
     return of(userPurchases);
   }
 }

@@ -22,7 +22,7 @@ import { CurrencyPipe } from "../../../shared/pipe/currency-format.pipe";
 export class PurchaseHistoryComponent {
   subscriptions: Subscription[] = [];
   userPurchaseService = inject(UserPurchaseService);
-  userPurchases$: Observable<UserPurchase[]> = this.userPurchaseService.userPurchases$;
+  userPurchasesCurrentUser$: Observable<UserPurchase[]> = this.userPurchaseService.userPurchasesCurrentUser$;
   router = inject(Router);
   dateFormatPipe = inject(DateFormatPipe);
   currencyPipe = inject(CurrencyPipe);
@@ -41,14 +41,14 @@ export class PurchaseHistoryComponent {
       filter(event => event instanceof NavigationEnd),
       tap(() => {
         // Refetch products with categories when navigating back
-        const subscriptionFetchUserPurchase = this.userPurchaseService.fetchUserPurchases().subscribe();
+        const subscriptionFetchUserPurchase = this.userPurchaseService.fetchUserPurchasesOfCurrentUser().subscribe();
         this.subscriptions.push(subscriptionFetchUserPurchase);
       })
     ).subscribe();
 
     this.subscriptions.push(subscriptionRoute);
 
-    const subscriptionFetchList = this.userPurchaseService.fetchUserPurchases().subscribe();
+    const subscriptionFetchList = this.userPurchaseService.fetchUserPurchasesOfCurrentUser().subscribe();
     this.subscriptions.push(subscriptionFetchList);
   }
 
