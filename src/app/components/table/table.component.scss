@@ -8,10 +8,19 @@ button {
 
 .table-widget {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   margin-bottom: 15px;
+
+  .input-search {
+    width: 200px;
+  }
 }
 
 .table {
   margin-bottom: 0;
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: center;
 }

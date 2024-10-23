@@ -7,8 +7,11 @@
       <c-card-body>
         <app-table
           [data]="(userPurchasesCurrentUser$ | async) ?? []"
+          [pageSize]="pageSize"
           [columns]="columns"
           [noAction]="true"
+          (pageSizeChange)="onPageSizeChange($event)"
+          (pageChange)="onPageChange($event)"
         />
       </c-card-body>
     </c-card>

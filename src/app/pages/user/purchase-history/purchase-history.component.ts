@@ -3,7 +3,7 @@ import { sharedImports } from "../../../shared/imports/shared-imports";
 import { TableComponent } from "../../../components/table/table.component";
 import { UserPurchase } from "../../../interfaces/user-purchase";
 import { filter, Observable, Subscription, tap } from "rxjs";
-import { TableColumn } from "../../../interfaces/table";
+import { PaginationState, TableColumn } from "../../../interfaces/table";
 import { UserPurchaseService } from "../../../services/user-purchase.service";
 import { NavigationEnd, Router } from "@angular/router";
 import { DateFormatPipe } from "../../../shared/pipe/date-format.pipe";
@@ -26,6 +26,10 @@ export class PurchaseHistoryComponent {
   router = inject(Router);
   dateFormatPipe = inject(DateFormatPipe);
   currencyPipe = inject(CurrencyPipe);
+
+  // Table states
+  pageSize: number = localStorage.getItem('purchaseHistoryPageSize') ? parseInt(localStorage.getItem('purchaseHistoryPageSize')!) : 5;
+  currentPage: number = 1;
 
   columns: TableColumn<UserPurchase>[] = [
     { key: 'createdAt', label: 'Date Purchased', pipe: (value: Date) => this.dateFormatPipe.transform(value) },
@@ -51,6 +55,17 @@ export class PurchaseHistoryComponent {
     const subscriptionFetchList = this.userPurchaseService.fetchUserPurchasesOfCurrentUser().subscribe();
     this.subscriptions.push(subscriptionFetchList);
   }
+
+  onPageChange(pageState: PaginationState): void {
+    this.currentPage = pageState.currentPage;
+    this.pageSize = pageState.pageSize;
+  }
+
+  onPageSizeChange(newSize: number): void {
+    this.pageSize = newSize;
+    localStorage.setItem('purchaseHistoryPageSize', String(newSize));
+  }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());

@@ -7,10 +7,13 @@
       <c-card-body>
         <app-table
           [data]="(products$ | async) ?? []"
+          [pageSize]="pageSize"
           [columns]="columns"
           (add)="onAdd()"
           (edit)="onEdit($event)"
           (delete)="onDelete($event)"
+          (pageSizeChange)="onPageSizeChange($event)"
+          (pageChange)="onPageChange($event)"
         />
       </c-card-body>
     </c-card>

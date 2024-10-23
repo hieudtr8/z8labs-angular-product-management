@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductService } from "../../../../services/product.service";
-import { filter, Observable, Subscription, tap } from 'rxjs';
+import { filter, map, Observable, Subscription, tap } from 'rxjs';
 import { Product } from "../../../../interfaces/product";
 import { sharedImports } from "../../../../shared/imports/shared-imports";
-import { TableColumn } from "../../../../interfaces/table";
+import { PaginationState, TableColumn } from "../../../../interfaces/table";
 import { NavigationEnd, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { TableComponent } from "../../../../components/table/table.component";
@@ -31,6 +31,12 @@ export class ProductListComponent implements OnInit {
   isVisibleModalDelete: boolean = false;
   currencyPipe = inject(CurrencyPipe);
 
+  // Table states
+  pageSize: number = 5;
+  currentPage: number = 1;
+  search: string = '';
+
+  // Table columns
   columns: TableColumn<Product>[] = [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
@@ -47,7 +53,11 @@ export class ProductListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const pageSize = localStorage.getItem('productPageSize');
+    if (pageSize) this.pageSize = parseInt(pageSize);
+
     this.products$ = this.productService.products$;
+
     const subscriptionRoute = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       tap(() => {
@@ -105,6 +115,16 @@ export class ProductListComponent implements OnInit {
 
   handleVisibleChange(isVisible: boolean): void {
     this.isVisibleModalDelete = isVisible;
+  }
+
+  onPageChange(pageState: PaginationState): void {
+    this.currentPage = pageState.currentPage;
+    this.pageSize = pageState.pageSize
+  }
+
+  onPageSizeChange(newSize: number): void {
+    this.pageSize = newSize;
+    localStorage.setItem('productPageSize', newSize.toString());
   }
 
   ngOnDestroy(): void {

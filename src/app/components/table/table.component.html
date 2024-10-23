@@ -1,41 +1,61 @@
 <div class="table-wrapper">
   <!-- Widget button add new -->
-  <div class="table-widget">
-    <button
-      *ngIf="!noAction"
-      (click)="onAdd()"
-      cButton
-      size="sm"
-      color="info"
-    >
-      <svg
-        cIcon
-        name="cil-plus"
+  <div class="table-widget d-flex justify-content-between align-items-center">
+    <!-- Left side with search -->
+    <div>
+      <input
+        class="input-search"
+        cFormControl
+        placeholder="Search"
+        type="text"
+        [(ngModel)]="search"
+        (ngModelChange)="onSearch($event)"
+      />
+    </div>
+
+    <!-- Right side with page size selector and add button -->
+    <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <select
+          cSelect
+          class="form-select"
+          style="width: 80px;"
+          [(ngModel)]="pageSize"
+          (ngModelChange)="onPageSizeChange($event)"
+        >
+          <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+
+      <button
+        *ngIf="!noAction"
+        (click)="onAdd()"
+        cButton
         size="sm"
-      ></svg>
-      Add New
-    </button>
+        color="info"
+      >
+        <svg cIcon name="cil-plus" size="sm"></svg>
+        Add New
+      </button>
+    </div>
   </div>
 
   <!-- Table -->
-  <table
-    cTable
-    striped
-    hover
-    bordered
-    responsive
-    class="data-table"
-  >
+  <table cTable striped hover bordered responsive class="data-table">
     <!-- Headers -->
     <thead>
       <tr>
+        <th>#</th>
         <th *ngFor="let col of columns">{{ col.label }}</th>
-        <th *ngIf="!noAction" >Actions</th>
+        <th *ngIf="!noAction">Actions</th>
       </tr>
     </thead>
     <!-- Body row data -->
     <tbody>
-      <tr *ngFor="let row of data">
+      <tr *ngFor="let row of paginatedData; let i = index">
+        <!-- Index -->
+        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+
         <td *ngFor="let col of columns">
           <!-- Without Pipe -->
           <ng-container *ngIf="!col.pipe && !col.type">{{ row[col.key] }}</ng-container>
@@ -47,38 +67,37 @@
 
           <!-- Case have type image -->
           <ng-container *ngIf="col.type === 'image'">
-            <img
-              [src]="row[col.key]"
-              alt="Product Image"
-              class="img-fluid"
-              width="35"
-              height="35"
-            />
+            <img [src]="row[col.key]" alt="Product Image" class="img-fluid" width="35" height="35" />
           </ng-container>
         </td>
+
         <!-- Row actions -->
         <td class="d-flex gap-2" *ngIf="!noAction">
-          <button
-            (click)="onEdit(row)"
-            cButton
-            color="info"
-            cTooltip="Edit"
-          >
-            <svg
-              cIcon
-              name="cil-pencil"
-              size="sm"
-            ></svg>
+          <button (click)="onEdit(row)" cButton color="info" cTooltip="Edit">
+            <svg cIcon name="cil-pencil" size="sm"></svg>
           </button>
           <button (click)="onDelete(row)" cButton color="danger" cTooltip="Delete">
-            <svg
-              cIcon
-              name="cil-trash"
-              size="sm"
-            ></svg>
+            <svg cIcon name="cil-trash" size="sm"></svg>
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Pagination -->
+  <c-pagination class="d-flex justify-content-center mt-3" *ngIf="totalPages > 1">
+    <li cPageItem [disabled]="currentPage === 1">
+      <a cPageLink (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li cPageItem *ngFor="let page of pageNumbers" [active]="page === currentPage">
+      <a cPageLink (click)="onPageChange(page)">{{ page }}</a>
+    </li>
+    <li cPageItem [disabled]="currentPage === totalPages">
+      <a cPageLink (click)="onPageChange(currentPage + 1)" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </c-pagination>
 </div>

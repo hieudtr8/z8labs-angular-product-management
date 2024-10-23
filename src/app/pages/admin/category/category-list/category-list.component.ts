@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { sharedImports } from "../../../../shared/imports/shared-imports";
 import { Category } from "../../../../interfaces/category";
 import { CategoryService } from "../../../../services/category.service";
-import { Observable, Subscription } from "rxjs";
-import { TableColumn } from "../../../../interfaces/table";
+import { map, Observable, Subscription } from "rxjs";
+import { PaginationState, TableColumn } from "../../../../interfaces/table";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, ModalModule, RowComponent, TextColorDirective } from "@coreui/angular";
@@ -26,6 +26,10 @@ export class CategoryListComponent implements OnInit {
   categories$!: Observable<Category[]>;  // Observable for categories state
   categoryToDelete: Category | null = null;
   isVisibleModalDelete: boolean = false;
+
+  // Table states
+  pageSize: number = localStorage.getItem('categoryPageSize') ? parseInt(localStorage.getItem('categoryPageSize')!) : 5;
+  currentPage: number = 1;
 
   columns: TableColumn<Category>[] = [  // Columns for the table
     { key: 'name', label: 'Name' },
@@ -81,6 +85,16 @@ export class CategoryListComponent implements OnInit {
 
   handleVisibleChange(isVisible: boolean): void {
     this.isVisibleModalDelete = isVisible;
+  }
+
+  onPageChange(pageState: PaginationState): void {
+    this.currentPage = pageState.currentPage;
+    this.pageSize = pageState.pageSize;
+  }
+
+  onPageSizeChange(newSize: number): void {
+    this.pageSize = newSize;
+    localStorage.setItem('categoryPageSize', String(newSize));
   }
 
   ngOnDestroy(): void {
