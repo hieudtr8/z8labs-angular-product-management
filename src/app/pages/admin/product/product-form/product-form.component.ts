@@ -55,6 +55,7 @@ export class ProductFormComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       categoryId: [null, Validators.required],
+      imageUrl: [''],
     });
 
     // Check if we are in edit mode
