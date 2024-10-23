@@ -14,7 +14,7 @@
           [viewDate]="viewDate"
           [events]="events"
           [activeDayIsOpen]="true"
-          (dayClicked)="this.viewDate = $event.day.date"
+          (dayClicked)="onDayClicked($event.day)"
         />
       </c-card-body>
     </c-card>

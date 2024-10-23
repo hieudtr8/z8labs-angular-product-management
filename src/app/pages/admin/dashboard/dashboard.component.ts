@@ -7,6 +7,7 @@ import { sharedImports } from "../../../shared/imports/shared-imports";
 import { combineLatest, map, Observable, Subscription } from "rxjs";
 import { PieChartComponent } from "../../../components/pie-chart/pie-chart.component";
 import { CalendarEvent, CalendarModule } from "angular-calendar";
+import { MonthViewDay } from "calendar-utils";
 import { UserPurchaseService } from "../../../services/user-purchase.service";
 import { UserPurchase } from "../../../interfaces/user-purchase";
 
@@ -95,6 +96,13 @@ export class DashboardComponent implements OnInit {
       });
 
     this.subscriptions.push(subscribeCombine);
+  }
+
+  onDayClicked(day: MonthViewDay): void {
+    const { events } = day;
+    if (events.length === 0) return;
+
+    this.viewDate = day.date;
   }
 
   ngOnDestroy(): void {
