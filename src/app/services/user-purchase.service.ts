@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { collection, collectionData, doc, Firestore, setDoc, Timestamp } from "@angular/fire/firestore";
+import { collection, collectionData, doc, Firestore, limit, onSnapshot, orderBy, query, setDoc, Timestamp, where } from "@angular/fire/firestore";
 import { UserPurchase } from "../interfaces/user-purchase";
 import { BehaviorSubject, catchError, combineLatest, filter, from, map, Observable, of, Subscription, tap, throwError } from "rxjs";
 import { AuthService } from "./auth.service";
@@ -15,13 +15,50 @@ export class UserPurchaseService {
   // Store user purchases of current user
   private userPurchasesCurrentUserSubject = new BehaviorSubject<UserPurchase[]>([]);
   public userPurchasesCurrentUser$ = this.userPurchasesCurrentUserSubject.asObservable();
+
   // Store all user purchases
   private allUserPurchasesSubject = new BehaviorSubject<UserPurchase[]>([]);
   public allUserPurchases$ = this.allUserPurchasesSubject.asObservable();
 
+  // New user purchase of current user
+  private newUserPurchaseOfCurrentUserSubject = new BehaviorSubject<UserPurchase | null>(null);
+  public newUserPurchaseOfCurrentUser$ = this.newUserPurchaseOfCurrentUserSubject.asObservable();
+
   constructor() {
     // Clear user purchases state when user logs out
     this.authService.isLoggedIn$.subscribe(() => this.userPurchasesCurrentUserSubject.next([]));
+  }
+
+  // Socket listen to firestore user-purchases of current user realtime
+  listenToUserPurchases(): void {
+    const currentUser = this.authService.currentUserSig();
+
+    if (!currentUser) return;
+    const currentUserId = currentUser.id;
+
+    const userPurchasesCollection = collection(this.firestore, 'user-purchases');
+    const latestUserPurchasesQuery = query(
+      userPurchasesCollection,
+      where('userId', '==', currentUserId),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+
+    // Listen to Firestore changes in real-time
+    onSnapshot(latestUserPurchasesQuery, (snapshot) => {
+      // Check listen only when new user purchase is added
+      const docChanges = snapshot.docChanges()
+      if (docChanges.length < 2) return;
+
+      // Get the latest user purchase
+      const latestPurchases = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        createdAt: (doc.data()['createdAt'] as Timestamp).toDate(),
+        id: doc.id
+      }))[0] as UserPurchase;
+
+      this.newUserPurchaseOfCurrentUserSubject.next(latestPurchases);
+    });
   }
 
   // Fetch list of user purchases of current user

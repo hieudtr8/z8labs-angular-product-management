@@ -67,5 +67,5 @@ export const routes: Routes = [
   },
 
   // Wildcard route for any unmatched routes
-  { path: '**', redirectTo: '/user/purchhase-product' }
+  { path: '**', redirectTo: '/user/purchase-product' }
 ];

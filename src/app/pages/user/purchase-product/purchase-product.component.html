@@ -1,12 +1,12 @@
 <c-card-group class="mb-4">
   @for(product of (products$ | async); track product.id) {
-    <c-col xs="12" sm="6" md="4">
-      <c-card class="mb-4 mx-3">
+    <c-col xs="12" sm="6" md="4" class="mb-4">
+      <c-card class="mx-3 h-100">
         <!-- Header -->
         <c-card-header class="text-center">
-          <h4>
+          <h5>
             {{ product.name }}
-          </h4>
+          </h5>
         </c-card-header>
         <img
           [src]="product.imageUrl"
@@ -19,7 +19,10 @@
         <c-card-body>
           <p class="mt-3">{{ product.description }}</p>
           <p class="fw-semibold">{{ product.price | appCurrency }}</p>
+        </c-card-body>
 
+        <!-- Footer -->
+        <c-card-footer>
           <div class="d-flex justify-content-center pt-0">
             <button
               cButton
@@ -29,7 +32,7 @@
               Purchase
             </button>
           </div>
-        </c-card-body>
+        </c-card-footer>
 
       </c-card>
     </c-col>
@@ -84,7 +87,7 @@
         </div>
         <!-- Price -->
         <div class="d-flex justify-content-between">
-          <p class="fw-semibold">Base Price:</p>
+          <p class="fw-semibold">Product Price:</p>
           <p>{{ productToPurchase.price | appCurrency }}</p>
         </div>
         <!-- Total Price -->

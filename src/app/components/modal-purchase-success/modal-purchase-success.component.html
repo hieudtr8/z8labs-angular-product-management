@@ -1,0 +1,73 @@
+<c-modal id="modalPurchaseSuccess" [visible]="visible" (visibleChange)="visible = $event" size="sm" alignment="center">
+  <!-- Header -->
+  <c-modal-header>
+    <h5 cModalTitle>Purchased Successfully!</h5>
+    <button (click)="close.emit()" cButtonClose></button>
+  </c-modal-header>
+
+  <!-- Body -->
+  <c-modal-body *ngIf="userPurchase">
+    <!-- Order details -->
+    <c-row>
+      <!-- Purchase ID -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Order ID</label>
+          <input class="w-100" cFormControl [value]="userPurchase.id" disabled />
+        </div>
+      </c-col>
+
+      <!-- Buyer -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Buyer</label>
+          <input class="w-100" cFormControl [value]="userPurchase.userName" disabled />
+        </div>
+      </c-col>
+
+      <!-- Product name -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input class="w-100" cFormControl [value]="userPurchase.productName" disabled />
+        </div>
+      </c-col>
+
+      <!-- Quantity -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Purchase Quantity</label>
+          <input class="w-100" cFormControl [value]="userPurchase.quantity" disabled />
+        </div>
+      </c-col>
+
+      <!-- Total price -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Total Price</label>
+          <input class="w-100" cFormControl [value]="currencyPipe.transform(userPurchase.total)" disabled />
+        </div>
+      </c-col>
+
+      <!-- Purchase date -->
+      <c-col xs="12" class="my-2">
+        <div class="form-group">
+          <label>Purchase Date</label>
+          <input class="w-100" cFormControl [value]="dateFormatPipe.transform(userPurchase.createdAt)" disabled />
+        </div>
+      </c-col>
+    </c-row>
+  </c-modal-body>
+
+  <!-- Footer -->
+  <c-modal-footer>
+    <!-- To user/purchase/history -->
+    <button (click)="toPurchaseHistory()" cButton color="primary" class="text-white">
+      View Purchase History
+    </button>
+    <!-- Close modal -->
+    <button (click)="close.emit()" cButton color="success" class="text-white">
+      Ok
+    </button>
+  </c-modal-footer>
+</c-modal>

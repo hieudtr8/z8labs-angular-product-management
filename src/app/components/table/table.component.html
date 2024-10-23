@@ -72,13 +72,15 @@
         </td>
 
         <!-- Row actions -->
-        <td class="d-flex gap-2" *ngIf="!noAction">
-          <button (click)="onEdit(row)" cButton color="info" cTooltip="Edit">
-            <svg cIcon name="cil-pencil" size="sm"></svg>
-          </button>
-          <button (click)="onDelete(row)" cButton color="danger" cTooltip="Delete">
-            <svg cIcon name="cil-trash" size="sm"></svg>
-          </button>
+        <td *ngIf="!noAction">
+          <div class="d-flex gap-2">
+            <button (click)="onEdit(row)" cButton color="info" cTooltip="Edit">
+              <svg cIcon name="cil-pencil" size="sm"></svg>
+            </button>
+            <button (click)="onDelete(row)" cButton color="danger" cTooltip="Delete">
+              <svg cIcon name="cil-trash" size="sm"></svg>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>

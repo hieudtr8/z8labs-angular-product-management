@@ -1,26 +1,44 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AuthService } from "./services/auth.service";
 import { Title } from "@angular/platform-browser";
-import { ColorModeService } from "@coreui/angular";
+import { ColorModeService, ModalModule } from "@coreui/angular";
 import { IconSetService } from "@coreui/icons-angular";
 import { iconSubset } from "./icons/icon-subset";
 import { delay, filter, map, tap } from 'rxjs/operators';
+import { UserPurchaseService } from "./services/user-purchase.service";
+import { Subscription } from "rxjs";
+import { ModalPurchaseSuccessComponent } from "./components/modal-purchase-success/modal-purchase-success.component";
+import { UserPurchase } from "./interfaces/user-purchase";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    ModalPurchaseSuccessComponent,
   ],
-  template: '<router-outlet />',
+  template: `
+    <router-outlet />
+
+    <app-modal-purchase-success
+      [visible]="isVisibleNewUserPurchase"
+      [userPurchase]="newUserPurchase"
+      (close)="isVisibleNewUserPurchase = false"
+    />
+  `,
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   title = 'Angular Product Management';
 
+  subscription: Subscription[] = [];
   authService = inject(AuthService);
+  userPurchaseService = inject(UserPurchaseService);
+  isVisibleNewUserPurchase: boolean = false;
+  newUserPurchase: UserPurchase | null = null;
+
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   readonly #router = inject(Router);
@@ -73,8 +91,22 @@ export class AppComponent implements OnInit {
       } else {
         this.authService.currentUserSig.set(undefined);
       }
-    }
+    })
 
-    )
+    // Listen to socket new user purchase
+    this.userPurchaseService.listenToUserPurchases();
+
+    const subscribeToNewUserPurchase = this.userPurchaseService.newUserPurchaseOfCurrentUser$.subscribe((newUserPurchase) => {
+      if (newUserPurchase) {
+        this.newUserPurchase = newUserPurchase;
+        this.isVisibleNewUserPurchase = true;
+      }
+    });
+
+    this.subscription.push(subscribeToNewUserPurchase)
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 }
