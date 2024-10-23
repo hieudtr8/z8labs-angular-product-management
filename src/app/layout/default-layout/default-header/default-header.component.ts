@@ -1,5 +1,5 @@
-import { CommonModule, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { CommonModule, DOCUMENT, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { Component, computed, Inject, inject, input } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
@@ -73,5 +73,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   currentlyInLayout(layout: string) {
     return this.router.url.startsWith(`/${layout}`);
+  }
+
+  setTheme(theme: string) {
+    this.colorMode.set(theme);
   }
 }

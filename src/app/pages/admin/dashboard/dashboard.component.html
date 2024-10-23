@@ -11,6 +11,7 @@
       <!-- Body -->
       <c-card-body>
         <mwl-calendar-month-view
+          [ngClass]="calendarTheme()"
           [viewDate]="viewDate"
           [events]="events"
           [activeDayIsOpen]="showDayEventDetail"

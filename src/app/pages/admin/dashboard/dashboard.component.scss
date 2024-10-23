@@ -4,3 +4,68 @@
   align-items: center;
   height: 100%;
 }
+
+:host ::ng-deep {
+  $bg-dark-primary: #1f262d;
+  $bg-dark-secondary: #394046;
+  $bg-active: #2c343a;
+  $text-color: #d5d6d7;
+  $border-color: rgb(0 0 0 / 60%);
+  .dark-calendar-theme {
+
+    // How to override a non themable property, this was copied from chrome -> inspect element -> styles panel
+    .cal-month-view .cal-day-cell.cal-out-month .cal-day-number {
+      opacity: 0.15;
+    }
+    .cal-month-view {
+      background-color: $bg-dark-primary;
+      color: $text-color;
+    }
+
+    .cal-month-view .cal-day-cell.cal-today {
+      background-color: $bg-active;
+    }
+
+    .cal-month-view .cal-cell-row .cal-cell:hover {
+      background-color: $bg-active;
+    }
+    .cal-cell-row:hover {
+      background-color: #494a49;
+    }
+
+    // Everything else below is just themes the demo, it's probably not relevant to your app
+    background-color: $bg-dark-primary;
+    color: $text-color;
+
+    .card {
+      border-color: $border-color;
+    }
+
+    .card-header {
+      background-color: $bg-dark-secondary;
+    }
+
+    .card-body {
+      background-color: $bg-dark-primary;
+    }
+
+    .nav-tabs {
+      border-bottom-color: $border-color;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: $bg-dark-primary;
+      color: $text-color;
+      border-color: $border-color;
+    }
+
+    .nav-tabs .nav-link:hover,
+    .nav-tabs .nav-link:focus {
+      border-color: $border-color;
+    }
+    // First define some global color variables for your app, these are just for the demo, they can be anything you like
+
+    color: #000000;
+    background-color: #1d222b !important;
+  }
+}

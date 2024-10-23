@@ -4,12 +4,13 @@
 // Import Chart.js custom tooltips styles
 @import "@coreui/chartjs/scss/coreui-chartjs";
 
-
 // Custom styles for this theme
 @import "theme";
 
 // Import Angular Calendar styles
-@import "angular-calendar/css/angular-calendar";
+@import "angular-calendar/scss/angular-calendar";
+
+@import "angular-calendar/scss/variables";
 
 // Global styles
 body {

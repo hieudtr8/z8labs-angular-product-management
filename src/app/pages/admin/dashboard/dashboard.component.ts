@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, Inject, inject, OnInit } from '@angular/core';
 import { Product } from "../../../interfaces/product";
 import { Category } from "../../../interfaces/category";
 import { ProductService } from "../../../services/product.service";
@@ -10,6 +10,9 @@ import { CalendarEvent, CalendarModule } from "angular-calendar";
 import { MonthViewDay } from "calendar-utils";
 import { UserPurchaseService } from "../../../services/user-purchase.service";
 import { UserPurchase } from "../../../interfaces/user-purchase";
+import { CurrencyPipe } from "../../../shared/pipe/currency-format.pipe";
+import { DOCUMENT } from "@angular/common";
+import { ColorModeService } from "@coreui/angular";
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +30,10 @@ export class DashboardComponent implements OnInit {
   productService: ProductService = inject(ProductService);
   categoryService: CategoryService = inject(CategoryService);
   userPurchaseService: UserPurchaseService = inject(UserPurchaseService);
+  readonly #colorModeService = inject(ColorModeService);
+  readonly colorMode = this.#colorModeService.colorMode;
+  readonly calendarTheme = computed(() => this.colorMode() === 'dark' ? 'dark-calendar-theme' : '');
+  document: Document = inject(DOCUMENT);
 
   // subscriptions
   subscriptions: Subscription[] = [];
@@ -45,7 +52,10 @@ export class DashboardComponent implements OnInit {
   events!: CalendarEvent[];
   showDayEventDetail: boolean = true;
 
-  constructor() { }
+  // Pipes
+  currencyPipe = inject(CurrencyPipe);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.products$ = this.productService.products$;
@@ -86,10 +96,16 @@ export class DashboardComponent implements OnInit {
     const subscribeCombine = combineLatest([this.allUserPurchases$])
       .pipe(
         map(([userPurchases]) => {
-          return userPurchases.map(userPurchase => ({
-            title: `${userPurchase.quantity} "${userPurchase.productName || 'Unknown Product'}" was purchased by ${userPurchase.userName || 'Unknown'}`,
-            start: userPurchase.createdAt as Date,
-          }));
+          const mappedUserPurchaseToCalendar = userPurchases.map(userPurchase => {
+            const getTimeHourMinutesOfPurchase = (userPurchase.createdAt as Date).toLocaleTimeString();
+            return {
+              title: `
+                ${getTimeHourMinutesOfPurchase}:  ${userPurchase.quantity} "${userPurchase.productName || 'Unknown Product'}" was purchased with ${this.currencyPipe.transform(userPurchase.total)} by ${userPurchase.userName || 'Unknown'}
+                `,
+              start: userPurchase.createdAt as Date,
+            }
+          });
+          return mappedUserPurchaseToCalendar;
         })
       )
       .subscribe(data => {
