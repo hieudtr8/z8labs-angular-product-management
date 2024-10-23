@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
   // Calendar data
   viewDate: Date = new Date();
   events!: CalendarEvent[];
+  showDayEventDetail: boolean = true;
 
   constructor() { }
 
@@ -99,8 +100,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onDayClicked(day: MonthViewDay): void {
-    const { events } = day;
-    if (events.length === 0) return;
+    this.showDayEventDetail = this.viewDate.toDateString() === day.date.toDateString() ? !this.showDayEventDetail : true;
 
     this.viewDate = day.date;
   }
